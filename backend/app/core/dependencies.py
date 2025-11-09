@@ -6,7 +6,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from typing import AsyncGenerator, Optional
 from fastapi import Depends, Request
-from motor.motor_asyncio import AsyncIOMotorDatabase
 from fastapi import Depends
 
 from app.api.v1.module_system.user.schema import UserOutSchema
@@ -42,17 +41,6 @@ async def redis_getter(request: Request) -> Redis:
     - Redis: Redis连接
     """
     return request.app.state.redis
-
-async def mongo_getter(request: Request) -> AsyncIOMotorDatabase:
-    """获取MongoDB连接
-    
-    参数:
-    - request (Request): 请求对象
-    
-    返回:
-    - AsyncIOMotorDatabase: MongoDB连接
-    """ 
-    return request.app.state.mongo
 
 async def get_current_user(
     request: Request,

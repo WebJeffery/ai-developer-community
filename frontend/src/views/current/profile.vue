@@ -215,7 +215,7 @@
 
 <script lang="ts" setup>
 import type { FormInstance, UploadRequestOptions, UploadFile, ElUpload, ComponentSize } from 'element-plus'
-import UserAPI, { type InfoFormState, type PasswordFormState } from '@/api/system/user';
+import UserAPI, { type InfoFormState, type PasswordFormState } from '@/api/module_system/user';
 import { useUserStore, useDictStore } from "@/store";
 import { useUserStoreHook } from "@/store/modules/user.store";
 import { Camera } from '@element-plus/icons-vue';

@@ -4,12 +4,15 @@
 定义岗位相关数据模型
 """
 
-from typing import List
+from typing import TYPE_CHECKING, List
 
 from sqlalchemy import Boolean, String, Integer
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.core.base_model import CreatorMixin
+
+if TYPE_CHECKING:
+    from app.api.v1.module_system.user.model import UserModel
 
 
 class PositionModel(CreatorMixin):

@@ -53,13 +53,13 @@ def run(env: EnvironmentEnum = typer.Option(EnvironmentEnum.DEV, "--env", help="
     )
 
 @shell_app.command()
-def revision(message: str, env: EnvironmentEnum = typer.Option(EnvironmentEnum.DEV, "--env", help="运行环境 (dev, prod)")) -> None:
+def revision(env: EnvironmentEnum = typer.Option(EnvironmentEnum.DEV, "--env", help="运行环境 (dev, prod)")) -> None:
     """
     生成新的 Alembic 迁移脚本。
     """
     os.environ["ENVIRONMENT"] = env.value
-    command.revision(alembic_cfg, message=message, autogenerate=True)
-    typer.echo(f"迁移脚本已生成: {message}")
+    command.revision(alembic_cfg, autogenerate=True, message="迁移脚本")
+    typer.echo(f"迁移脚本已生成")
 
 @shell_app.command()
 def upgrade(env: EnvironmentEnum = typer.Option(EnvironmentEnum.DEV, "--env", help="运行环境 (dev, prod)")) -> None:

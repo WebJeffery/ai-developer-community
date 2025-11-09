@@ -1,21 +1,20 @@
 # -*- coding:utf-8 -*-
 
 from typing import List
-from fastapi import APIRouter, Depends, Query, Body, Path
+from fastapi import APIRouter, Depends, Body, Path
 from fastapi.responses import JSONResponse
 
-from app.common.response import SuccessResponse, ErrorResponse, StreamResponse
+from app.common.response import SuccessResponse, StreamResponse
 from app.core.dependencies import AuthPermission
 from app.core.router_class import OperationLogRoute
 from app.core.base_params import PaginationQueryParam
 from app.common.request import PaginationService
 from app.api.v1.module_system.auth.schema import AuthSchema
-from app.common.constant import RET
-from .param import GenTableQueryParam
-from .schema import GenTableSchema, GenTableOutSchema
-from .service import GenTableColumnService, GenTableService
 from app.utils.common_util import bytes2file_response
 from app.core.logger import logger
+from .param import GenTableQueryParam
+from .schema import GenTableSchema
+from .service import GenTableService
 
 
 GenRouter = APIRouter(route_class=OperationLogRoute, prefix='/gencode', tags=["代码生成模块"])
@@ -110,7 +109,7 @@ async def gen_table_detail_controller(
 
 @GenRouter.post("/create", summary="创建表结构", description="创建表结构")
 async def create_table_controller(
-    sql: str = Body(..., description="SQL语句：CREATE TABLE user_demo (\n  id INTEGER NOT NULL PRIMARY KEY,\n  username VARCHAR(64) NOT NULL UNIQUE,\n);"),
+    sql: str = Body(..., description="SQL语句，用于创建表结构"),
     auth: AuthSchema = Depends(AuthPermission(["generator:gencode:create"])),
 ) -> JSONResponse:
     """

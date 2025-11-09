@@ -1,5 +1,5 @@
 import { store } from "@/store";
-import ParamsAPI, { ConfigTable } from "@/api/system/params";
+import ParamsAPI, { ConfigTable } from "@/api/module_system/params";
 
 interface ConfigState {
   // 网站信息

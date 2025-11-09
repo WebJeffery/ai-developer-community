@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from typing import Optional
-from sqlalchemy import String, Integer, Text, DateTime, Boolean, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+{% for model_import in model_import_list %}
+{{ model_import }}
+{% endfor %}
+{% if table.sub %}
+from sqlalchemy.orm import relationship
+{% endif %}
+from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.base_model import CreatorMixin
 

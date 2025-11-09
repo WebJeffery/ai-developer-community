@@ -111,7 +111,7 @@ import Notification from "@/components/Notification/index.vue";
 import LockDialog from './LockDialog.vue'
 import LockPage from './LockPage.vue'
 import Guide from '@/components/Guide/index.vue'
-import ConfigInfoDrawer from "@/views/system/param/components/ConfigInfoDrawer.vue"
+import ConfigInfoDrawer from "@/views/module_system/param/components/ConfigInfoDrawer.vue"
 
 
 const { t } = useI18n();

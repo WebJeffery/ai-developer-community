@@ -20,7 +20,7 @@ export const constantRoutes: RouteRecordRaw[] = [
     path: "/login",
     name: "Login",
     meta: { hidden: true },
-    component: () => import("@/views/system/auth/index.vue"),
+    component: () => import("@/views/module_system/auth/index.vue"),
   },
   {
     path: "/401",
@@ -76,7 +76,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: "internal-app/:appId",
         name: "InternalApp",
         meta: { title: "内部应用", icon: "Monitor", hidden: true, keepAlive: false },
-        component: () => import("@/views/application/myapp/components/InternalApp.vue"),
+        component: () => import("@/views/module_application/myapp/components/InternalApp.vue"),
       },
     ],
   },

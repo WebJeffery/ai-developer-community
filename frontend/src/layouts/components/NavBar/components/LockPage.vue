@@ -23,7 +23,6 @@
       <div v-show="!showDate" class="entry-wrapper">
         <div class="entry-content">
           <div class="avatar-container">
-            <!-- <img src="@/assets/logo.png" alt="" class="avatar" /> -->
             <img :src="userStore.basicInfo.avatar" alt="" class="avatar" />
             <span class="username">{{ userStore.basicInfo.name }}</span>
           </div>

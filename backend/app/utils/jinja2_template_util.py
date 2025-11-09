@@ -173,15 +173,15 @@ class Jinja2TemplateUtil:
 
         # 映射表方式简化
         template_mapping = {
-            'controller.py.j2': f'{cls.BACKEND_PROJECT_PATH}/app/api/v1/module_{module_name}/{business_name}/controller.py',
-            'service.py.j2': f'{cls.BACKEND_PROJECT_PATH}/app/api/v1/module_{module_name}/{business_name}/service.py',
-            'crud.py.j2': f'{cls.BACKEND_PROJECT_PATH}/app/api/v1/module_{module_name}/{business_name}/crud.py',
-            'model.py.j2': f'{cls.BACKEND_PROJECT_PATH}/app/api/v1/module_{module_name}/{business_name}/model.py',
-            'param.py.j2': f'{cls.BACKEND_PROJECT_PATH}/app/api/v1/module_{module_name}/{business_name}/param.py',
-            'schema.py.j2': f'{cls.BACKEND_PROJECT_PATH}/app/api/v1/module_{module_name}/{business_name}/schema.py',
-            'sql.sql.j2': f'{cls.BACKEND_PROJECT_PATH}/sql/module_{module_name}/{business_name}_menu.sql',
-            'api.ts.j2': f'{cls.FRONTEND_PROJECT_PATH}/src/api/module_{module_name}/{business_name}.ts',
-            'index.vue.j2': f'{cls.FRONTEND_PROJECT_PATH}/src/views/module_{module_name}/{business_name}/index.vue'
+            'controller.py.j2': f'{cls.BACKEND_PROJECT_PATH}/app/api/v1/{module_name}/{business_name}/controller.py',
+            'service.py.j2': f'{cls.BACKEND_PROJECT_PATH}/app/api/v1/{module_name}/{business_name}/service.py',
+            'crud.py.j2': f'{cls.BACKEND_PROJECT_PATH}/app/api/v1/{module_name}/{business_name}/crud.py',
+            'model.py.j2': f'{cls.BACKEND_PROJECT_PATH}/app/api/v1/{module_name}/{business_name}/model.py',
+            'param.py.j2': f'{cls.BACKEND_PROJECT_PATH}/app/api/v1/{module_name}/{business_name}/param.py',
+            'schema.py.j2': f'{cls.BACKEND_PROJECT_PATH}/app/api/v1/{module_name}/{business_name}/schema.py',
+            'sql.sql.j2': f'{cls.BACKEND_PROJECT_PATH}/sql/{module_name}/{business_name}_menu.sql',
+            'api.ts.j2': f'{cls.FRONTEND_PROJECT_PATH}/src/api/{module_name}/{business_name}.ts',
+            'index.vue.j2': f'{cls.FRONTEND_PROJECT_PATH}/src/views/{module_name}/{business_name}/index.vue'
         }
         
         # 查找匹配的模板路径
@@ -242,7 +242,7 @@ class Jinja2TemplateUtil:
         """
         columns = gen_table.columns or []
         import_list = set()
-        import_list.add('from sqlalchemy import Column')
+        
         for column in columns:
             if column.column_type:
                 data_type = cls.get_db_type(column.column_type)
@@ -339,8 +339,7 @@ class Jinja2TemplateUtil:
         - Set[str]: 更新后的字典类型集合。
         """
         for column in columns:
-            # 处理column.super_column, column.dict_type, column.html_type为None的情况
-            super_column = column.super_column if column.super_column is not None else False
+            super_column = column.super_column if column.super_column is not None else '0'
             dict_type = column.dict_type or ''
             html_type = column.html_type or ''
             

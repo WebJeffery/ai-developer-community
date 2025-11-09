@@ -1,5 +1,5 @@
 import { store } from "@/store";
-import DictAPI, { DictDataTable } from "@/api/system/dict";
+import DictAPI, { DictDataTable } from "@/api/module_system/dict";
 
 export const useDictStore = defineStore("dict", {
   state: () => ({

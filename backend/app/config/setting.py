@@ -55,6 +55,12 @@ class Settings(BaseSettings):
     ROOT_PATH: str = "/api/v1"   # API路由前缀
 
     # ================================================= #
+    # ******************* alembic配置 ****************** #
+    # ================================================= #
+    # alembic 迁移文件存放路径
+    ALEMBIC_VERSION_DIR: Path = BASE_DIR / 'app' / 'alembic' / 'versions'
+
+    # ================================================= #
     # ******************** 跨域配置 ******************** #
     # ================================================= #
     CORS_ORIGIN_ENABLE: bool = True    # 是否启用跨域
@@ -82,36 +88,27 @@ class Settings(BaseSettings):
     SQL_DB_ENABLE: bool = True                             # 是否启用数据库
     DATABASE_ECHO: bool | Literal['debug'] = False         # 是否显示SQL日志
     ECHO_POOL: bool | Literal['debug'] = False             # 是否显示连接池日志
-    POOL_SIZE: int = 20                                    # 连接池大小
-    MAX_OVERFLOW: int = 10                                 # 最大溢出连接数
+    POOL_SIZE: int = 10                                    # 连接池大小
+    MAX_OVERFLOW: int = 20                                 # 最大溢出连接数
     POOL_TIMEOUT: int = 30                                 # 连接超时时间(秒)
     POOL_RECYCLE: int = 1800                               # 连接回收时间(秒)
+    POOL_USE_LIFO: bool = True                             # 是否使用LIFO连接池
     POOL_PRE_PING: bool = True                             # 是否开启连接预检
     FUTURE: bool = True                                    # 是否使用SQLAlchemy 2.0特性
     AUTOCOMMIT: bool = False                               # 是否自动提交
-    AUTOFETCH: bool = False                                # 是否自动获取
+    AUTOFETCH: bool = False                                # 是否自动刷新
     EXPIRE_ON_COMMIT: bool = False                         # 是否在提交时过期
 
     # 数据库类型
-    DATABASE_TYPE: Literal['sqlite','mysql', 'postgresql'] = 'sqlite'
+    DATABASE_TYPE: Literal['mysql', 'postgres'] = 'mysql'
     
 
-    # MySQL/PostgreSQL/SQLite数据库连接
+    # MySQL/PostgreSQL数据库连接
     DATABASE_HOST: str = 'localhost'
     DATABASE_PORT: int = 3306
     DATABASE_USER: str = 'root'
     DATABASE_PASSWORD: str = 'ServBay.dev'
     DATABASE_NAME: str = 'fastapiadmin'
-
-    # ================================================= #
-    # ******************** MongoDB配置 ******************* #
-    # ================================================= #
-    MONGO_DB_ENABLE: bool = False # 是否启用MongoDB
-    MONGO_DB_USER: str = ''
-    MONGO_DB_PASSWORD: str = ''
-    MONGO_DB_HOST: str = 'localhost'
-    MONGO_DB_PORT: int = 27017
-    MONGO_DB_NAME: str = 'admin'
 
     # ================================================= #
     # ******************** Redis配置 ******************* #
@@ -198,14 +195,6 @@ class Settings(BaseSettings):
     SCRIPT_DIR: Path = BASE_DIR.joinpath('app/scripts/data')
 
     # ================================================= #
-    # ******************* 代码生成配置 ****************** #
-    # ================================================= #
-    package_name: str = 'module_gencode'            # 默认生成包路径 system 需改成自己的模块名称 如 system monitor tool
-    auto_remove_pre: bool = False                   # 自动去除表前缀，默认是True
-    table_prefix: str = 'gen_'                      # 表前缀（生成类名不会包含表前缀，多个用逗号分隔）
-    allow_overwrite: bool = True                    # 是否允许生成文件覆盖到本地（自定义路径），默认不允许
-
-    # ================================================= #
     # ******************* AI大模型配置 ****************** #
     # ================================================= #
     OPENAI_BASE_URL: str = ''
@@ -230,7 +219,6 @@ class Settings(BaseSettings):
     def EVENT_LIST(self) -> List[Optional[str]]:
         """获取事件列表"""
         EVENTS: List[Optional[str]] = [
-            "app.core.database.mongodb_connect" if self.MONGO_DB_ENABLE else None,
             "app.core.database.redis_connect" if self.REDIS_ENABLE else None,
         ]
         return EVENTS
@@ -240,29 +228,20 @@ class Settings(BaseSettings):
         """获取异步数据库连接"""
         if self.DATABASE_TYPE == "mysql":
             return f"mysql+asyncmy://{self.DATABASE_USER}:{quote_plus(self.DATABASE_PASSWORD)}@{self.DATABASE_HOST}:{self.DATABASE_PORT}/{self.DATABASE_NAME}?charset=utf8mb4"
-        elif self.DATABASE_TYPE == "postgresql":
+        elif self.DATABASE_TYPE == "postgres":
             return f"postgresql+asyncpg://{self.DATABASE_USER}:{quote_plus(self.DATABASE_PASSWORD)}@{self.DATABASE_HOST}:{self.DATABASE_PORT}/{self.DATABASE_NAME}"
-        elif self.DATABASE_TYPE == "sqlite":
-            return f"sqlite+aiosqlite:///{self.BASE_DIR.joinpath(self.DATABASE_NAME + '.db')}?characterEncoding=UTF-8"
         else:
-            raise ValueError(f"数据库驱动不支持: {self.DATABASE_TYPE}, 请选择 请选择 mysql、postgresql、sqlite")
+            raise ValueError(f"数据库驱动不支持: {self.DATABASE_TYPE}, 请选择 请选择 mysql、postgres")
 
     @property
     def DB_URI(self) -> str:
         """获取同步数据库连接"""
         if self.DATABASE_TYPE == "mysql":
             return f"mysql+pymysql://{self.DATABASE_USER}:{quote_plus(self.DATABASE_PASSWORD)}@{self.DATABASE_HOST}:{self.DATABASE_PORT}/{self.DATABASE_NAME}?charset=utf8mb4"
-        elif self.DATABASE_TYPE == "postgresql":
+        elif self.DATABASE_TYPE == "postgres":
             return f"postgresql+psycopg2://{self.DATABASE_USER}:{quote_plus(self.DATABASE_PASSWORD)}@{self.DATABASE_HOST}:{self.DATABASE_PORT}/{self.DATABASE_NAME}"
-        elif self.DATABASE_TYPE == "sqlite":
-            return f"sqlite:///{self.BASE_DIR.joinpath(self.DATABASE_NAME + '.db')}?charset=utf8"
         else:
-            raise ValueError(f"数据库驱动不支持: {self.DATABASE_TYPE}, 请选择 mysql、postgresql、sqlite")
-
-    @property
-    def MONGO_DB_URI(self) -> str:
-        """获取MongoDB连接"""
-        return f"mongodb://{self.MONGO_DB_USER}:{self.MONGO_DB_PASSWORD}@{self.MONGO_DB_HOST}:{self.MONGO_DB_PORT}/{self.MONGO_DB_NAME}"
+            raise ValueError(f"数据库驱动不支持: {self.DATABASE_TYPE}, 请选择 mysql、postgres")
     
     @property
     def REDIS_URI(self) -> str:

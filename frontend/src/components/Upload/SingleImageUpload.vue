@@ -49,7 +49,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import { UploadRawFile, UploadRequestOptions, ElMessage, type UploadUserFile } from "element-plus";
-import ParamsAPI from '@/api/system/params';
+import ParamsAPI from '@/api/module_system/params';
 
 const props = defineProps({
   /**

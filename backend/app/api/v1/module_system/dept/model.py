@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from typing import Optional, List
+from typing import TYPE_CHECKING, Optional, List
 from sqlalchemy import Boolean, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.core.base_model import ModelMixin
+
+if TYPE_CHECKING:
+    from app.api.v1.module_system.role.model import RoleModel
+    from app.api.v1.module_system.user.model import UserModel
 
 class DeptModel(ModelMixin):
     """

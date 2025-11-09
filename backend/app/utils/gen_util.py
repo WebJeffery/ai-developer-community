@@ -4,7 +4,6 @@ import re
 from typing import List
 
 from app.common.constant import GenConstant
-from app.config.setting import settings
 from app.utils.string_util import StringUtil
 from app.api.v1.module_generator.gencode.schema import GenTableOutSchema, GenTableSchema, GenTableColumnSchema
 
@@ -25,8 +24,8 @@ class GenUtils:
         """
         # 只有当字段为None时才设置默认值
         gen_table.class_name = cls.convert_class_name(gen_table.table_name or "")
-        gen_table.package_name = settings.package_name
-        gen_table.module_name = settings.package_name.split('.')[-1]
+        gen_table.package_name = 'module_gencode'
+        gen_table.module_name = gen_table.package_name.split('.')[-1]
         gen_table.business_name = gen_table.table_name.split('_')[-1]
         gen_table.function_name = re.sub(r'(?:表|测试)', '', gen_table.table_comment or "")
 
@@ -44,32 +43,16 @@ class GenUtils:
         """
         data_type = cls.get_db_type(column.column_type or "")
         column_name = column.column_name or ""
+        if not table.id:
+            raise ValueError("业务表ID不能为空")
         column.table_id = table.id
         column.python_field = cls.to_camel_case(column_name)
         # 只有当python_type为None时才设置默认类型
         column.python_type = StringUtil.get_mapping_value_by_key_ignore_case(GenConstant.DB_TO_PYTHON, data_type)
-        # 查询类型：优先根据字段语义（如以name结尾走LIKE），否则默认EQ
-        column.query_type = GenConstant.QUERY_LIKE
-
-        # 确保is_pk等字段为字符串格式
-        # 将布尔值或其他类型转换为字符串'1'或'0'
-        if column.is_pk is not None and not isinstance(column.is_pk, str):
-            column.is_pk = '1' if bool(column.is_pk) else '0'
-        if column.is_increment is not None and not isinstance(column.is_increment, str):
-            column.is_increment = '1' if bool(column.is_increment) else '0'
-        if column.is_required is not None and not isinstance(column.is_required, str):
-            column.is_required = '1' if bool(column.is_required) else '0'
-        if column.is_unique is not None and not isinstance(column.is_unique, str):
-            column.is_unique = '1' if bool(column.is_unique) else '0'
         
-        # 确保None值默认为'0'
-        column.is_pk = column.is_pk or '0'
-        column.is_increment = column.is_increment or '0'
-        column.is_required = column.is_required or '0'
-        column.is_unique = column.is_unique or '0'
-        # 确保column_length和column_default字段有默认值
         if column.column_length is None:
             column.column_length = ''
+        
         if column.column_default is None:
             column.column_default = ''
 
@@ -103,52 +86,58 @@ class GenUtils:
                 column.html_type = GenConstant.HTML_INPUT
 
         # 只有当is_insert为None时才设置插入字段（默认所有字段都需要插入）
-        if column.is_insert is None:
+        if column.is_insert:
             column.is_insert = GenConstant.REQUIRE
         else:
-            # 确保is_insert为字符串格式，并且值为'0'或'1'
-            column.is_insert = '1' if (column.is_insert is True or str(column.is_insert).lower() in ('1', 'true', 'yes')) else '0'
+            column.is_insert = False
             
         # 只有当is_edit为None时才设置编辑字段
-        if column.is_edit is None:
-            if not cls.arrays_contains(GenConstant.COLUMNNAME_NOT_EDIT, column_name) and column.is_pk != '1':
-                column.is_edit = GenConstant.REQUIRE
-            else:
-                column.is_edit = '0'
+        if not cls.arrays_contains(GenConstant.COLUMNNAME_NOT_EDIT, column_name) and not column.is_pk:
+            column.is_edit = GenConstant.REQUIRE
         else:
-            # 确保is_edit为字符串格式，并且值为'0'或'1'
-            column.is_edit = '1' if (column.is_edit is True or str(column.is_edit).lower() in ('1', 'true', 'yes')) else '0'
+            column.is_edit = False
             
         # 只有当is_list为None时才设置列表字段
-        if column.is_list is None:
-            if not cls.arrays_contains(GenConstant.COLUMNNAME_NOT_LIST, column_name) and column.is_pk != '1':
-                column.is_list = GenConstant.REQUIRE
-            else:
-                column.is_list = '0'
+        if not cls.arrays_contains(GenConstant.COLUMNNAME_NOT_LIST, column_name) and not column.is_pk:
+            column.is_list = GenConstant.REQUIRE
         else:
-            # 确保is_list为字符串格式，并且值为'0'或'1'
-            column.is_list = '1' if (column.is_list is True or str(column.is_list).lower() in ('1', 'true', 'yes')) else '0'
+            column.is_list = False
             
         # 只有当is_query为None时才设置查询字段
-        if column.is_query is None:
-            if not cls.arrays_contains(GenConstant.COLUMNNAME_NOT_QUERY, column_name) and column.is_pk != '1':
-                column.is_query = GenConstant.REQUIRE
+        if not cls.arrays_contains(GenConstant.COLUMNNAME_NOT_QUERY, column_name) and not column.is_pk:
+            column.is_query = GenConstant.REQUIRE
+            # 直接设置查询类型，因为我们已经确定这是一个查询字段
+            if column_name.lower().endswith('name') or data_type in ['varchar', 'char', 'text']:
+                column.query_type = GenConstant.QUERY_LIKE
             else:
-                column.is_query = '0'
+                column.query_type = GenConstant.QUERY_EQ
         else:
-            # 确保is_query为字符串格式，并且值为'0'或'1'
-            column.is_query = '1' if (column.is_query is True or str(column.is_query).lower() in ('1', 'true', 'yes')) else '0'
+            column.is_query = False
+            column.query_type = None
 
     @classmethod
-    def arrays_contains(cls, arr: List[str], target_value: str) -> bool:
+    def arrays_contains(cls, arr, target_value) -> bool:
         """
-        校验数组是否包含指定值
+        检查目标值是否在数组中
+        
+        注意：从根本上解决问题，现在确保传入的参数都是正确的类型：
+        - arr 是列表类型，且在GenConstant中定义
+        - target_value 不会是None
 
-        param arr: 数组
-        param target_value: 需要校验的值
-        :return: 校验结果
+        参数:
+        - arr: 数组类型
+        - target_value: 目标值
+
+        返回:
+        - bool: 如果目标值在数组中，返回True；否则返回False
         """
-        return target_value in arr
+        # 从根本上解决问题，不再需要复杂的防御性检查
+        # 因为现在我们确保传入的arr是GenConstant中定义的列表常量
+        # 并且target_value在调用前已经被处理过不会是None
+        
+        # 简单直接地执行包含检查
+        target_str = str(target_value).lower()
+        return any(str(item).lower() == target_str for item in arr)
 
     @classmethod
     def convert_class_name(cls, table_name: str) -> str:
@@ -161,11 +150,6 @@ class GenUtils:
         返回:
         - str: Python 类名。
         """
-        auto_remove_pre = settings.auto_remove_pre
-        table_prefix = settings.table_prefix
-        if auto_remove_pre and table_prefix:
-            search_list = table_prefix.split(',')
-            table_name = cls.replace_first(table_name, search_list)
         return StringUtil.convert_to_camel_case(table_name)
 
     @classmethod
