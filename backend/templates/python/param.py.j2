@@ -15,11 +15,13 @@ class {{ class_name }}QueryParam:
         {{ column.column_name }}: Optional[{{ column.python_type }}] = Query(None, description="{{ column.column_comment }}"),
         {% endif %}
         {% endfor %}
+
         {% for column in columns %}
-        {% if column.column_name == 'status' %}
-        status: Optional[bool] = Query(None, description="是否启用"),
+        {% if column.column_name == 'EQ' %}
+        {{ column.column_name }}: Optional[{{ column.python_type }}] = Query(None, description="{{ column.column_comment }}"),
         {% endif %}
         {% endfor %}
+
         creator: Optional[int] = Query(None, description="创建人"),
         start_time: Optional[DateTimeStr] = Query(None, description="开始时间", example="2025-01-01 00:00:00"),
         end_time: Optional[DateTimeStr] = Query(None, description="结束时间", example="2025-12-31 23:59:59"),
@@ -33,12 +35,12 @@ class {{ class_name }}QueryParam:
         {% endfor %}
 
         # 精确查询字段
-        self.creator_id = creator
         {% for column in columns %}
-        {% if column.column_name == 'status' %}
-        self.status = status
+        {% if column.query_type == 'EQ' %}
+        self.{{ column.column_name }} = {{ column.column_name }}
         {% endif %}
         {% endfor %}
+        self.creator_id = creator
 
         # 时间范围查询
         if start_time and end_time:

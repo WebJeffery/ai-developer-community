@@ -37,9 +37,10 @@ async_engine: AsyncEngine = create_async_engine(
     pool_pre_ping=settings.POOL_PRE_PING,
     future=settings.FUTURE,
     pool_recycle=settings.POOL_RECYCLE,
-    # pool_size=settings.POOL_SIZE,  # sqlite 不支持
-    # max_overflow=settings.MAX_OVERFLOW,  # sqlite 不支持
-    # pool_timeout=settings.POOL_TIMEOUT,  # sqlite 不支持
+    pool_size=settings.POOL_SIZE,
+    max_overflow=settings.MAX_OVERFLOW,
+    pool_timeout=settings.POOL_TIMEOUT,
+    pool_use_lifo=settings.POOL_USE_LIFO,
 )
 
 # 异步数据库会话工厂
@@ -103,37 +104,3 @@ async def redis_connect(app: FastAPI, status: bool) -> Redis | None:
     else:
         await app.state.redis.close()
         logger.info('✅️ Redis连接已关闭')
-
-async def mongodb_connect(app: FastAPI, status: bool) -> AsyncIOMotorClient | None:
-    """
-    创建或关闭MongoDB连接。
-    
-    参数:
-    - app (FastAPI): FastAPI应用实例。
-    - status (bool): 连接状态,True为创建连接,False为关闭连接。
-    
-    返回:
-    - AsyncIOMotorClient | None: MongoDB异步客户端实例,如果连接失败则返回None。
-    """
-    if not settings.MONGO_DB_ENABLE:
-        raise CustomException(msg="请先开启MongoDB连接", data="请启用 app/core/config.py: MONGO_DB_ENABLE")
-
-    if status:
-        try:
-            
-            client = AsyncIOMotorClient(
-                settings.MONGO_DB_URI,
-                maxPoolSize=settings.POOL_SIZE,
-                minPoolSize=settings.MAX_OVERFLOW,
-                serverSelectionTimeoutMS=settings.POOL_TIMEOUT * 1000
-            )
-            app.state.mongo_client = client
-            app.state.mongo = client[settings.MONGO_DB_NAME]
-            data = await client.server_info()
-            logger.info("✅️ MongoDB连接成功...", data)
-            return client
-        except Exception as e:
-            raise ValueError(f"MongoDB连接失败: {e}")
-    else:
-        app.state.mongo_client.close()
-        logger.info("✅️ MongoDB连接已关闭")

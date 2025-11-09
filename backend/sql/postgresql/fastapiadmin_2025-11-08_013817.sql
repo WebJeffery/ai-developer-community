@@ -863,7 +863,7 @@ CREATE TABLE public.gen_table_column (
     python_field character varying(200),
     is_pk character varying(1),
     is_increment character varying(1),
-    is_required character varying(1),
+    is_nullable character varying(1),
     is_unique character varying(1),
     is_insert character varying(1),
     is_edit character varying(1),
@@ -955,10 +955,10 @@ COMMENT ON COLUMN public.gen_table_column.is_increment IS '是否自增（1是�
 
 
 --
--- Name: COLUMN gen_table_column.is_required; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN gen_table_column.is_nullable; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.gen_table_column.is_required IS '是否必填（1是）';
+COMMENT ON COLUMN public.gen_table_column.is_nullable IS '是否必填（1是）';
 
 
 --
@@ -2788,7 +2788,7 @@ COPY public.gen_table (table_name, table_comment, sub_table_name, sub_table_fk_n
 -- Data for Name: gen_table_column; Type: TABLE DATA; Schema: public; Owner: tao
 --
 
-COPY public.gen_table_column (column_name, column_comment, column_type, column_length, column_default, python_type, python_field, is_pk, is_increment, is_required, is_unique, is_insert, is_edit, is_list, is_query, query_type, html_type, dict_type, sort, table_id, creator_id, id, description, created_at, updated_at) FROM stdin;
+COPY public.gen_table_column (column_name, column_comment, column_type, column_length, column_default, python_type, python_field, is_pk, is_increment, is_nullable, is_unique, is_insert, is_edit, is_list, is_query, query_type, html_type, dict_type, sort, table_id, creator_id, id, description, created_at, updated_at) FROM stdin;
 \.
 
 

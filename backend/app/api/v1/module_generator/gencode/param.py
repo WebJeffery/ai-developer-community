@@ -22,7 +22,7 @@ class GenTableQueryParam:
 
 class GenTableColumnQueryParam:
     """代码生成业务表字段查询参数
-    - `column_name`按like规则模糊查询（透传到CRUD层）。
+    - `column_name`按like规则模糊查询（透传到CRUD层）
     """
 
     def __init__(

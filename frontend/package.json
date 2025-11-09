@@ -1,5 +1,5 @@
 {
-  "name": "fastapi-vue3-admin",
+  "name": "FastapiAdmin",
   "description": "Vue3 + Vite + TypeScript + Element-Plus 的后台管理模板",
   "version": "2.0.0",
   "private": true,

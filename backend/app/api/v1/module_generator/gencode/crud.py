@@ -3,16 +3,16 @@
 from sqlalchemy.engine.row import Row
 from sqlalchemy import and_, select, text
 from typing import List, Optional, Sequence, Dict, Union, Any
+from sqlglot.expressions import Expression
 
 from app.core.logger import logger
 from app.config.setting import settings
 from app.core.base_crud import CRUDBase
 from app.api.v1.module_system.auth.schema import AuthSchema
-from .param import GenTableQueryParam, GenTableColumnQueryParam
+from .param import GenTableQueryParam
 from .model import GenTableModel, GenTableColumnModel
 from .schema import (
     GenTableSchema,
-    GenTableOutSchema,
     GenTableColumnSchema,
     GenTableColumnOutSchema,
     GenDBTableSchema,
@@ -80,7 +80,6 @@ class GenTableCRUD(CRUDBase[GenTableModel, GenTableSchema, GenTableSchema]):
         返回:
         - Sequence[GenTableModel]: 业务表列表信息。
         """
-        # 使用基础CRUD的list与like检索
         return await self.list(search=search.__dict__, order_by=[{"created_at": "desc"}], preload=preload)
 
     async def add_gen_table(self, add_model: GenTableSchema) -> GenTableModel:
@@ -93,9 +92,9 @@ class GenTableCRUD(CRUDBase[GenTableModel, GenTableSchema, GenTableSchema]):
         返回:
         - GenTableModel: 新增的业务表信息对象。
         """
-        return await self.create(add_model.model_dump(exclude_unset=True, exclude={"sub", "tree", "crud"}))
+        return await self.create(data=add_model)
 
-    async def edit_gen_table(self, table_id: int, edit_model: GenTableSchema) -> GenTableSchema:
+    async def edit_gen_table(self, table_id: int, edit_model: GenTableSchema) -> GenTableModel:
         """
         修改业务表信息。
 
@@ -107,9 +106,7 @@ class GenTableCRUD(CRUDBase[GenTableModel, GenTableSchema, GenTableSchema]):
         - GenTableSchema: 修改后的业务表信息模型。
         """
         # 排除嵌套对象字段，避免SQLAlchemy尝试直接将字典设置到模型实例上
-        data_dict = edit_model.model_dump(exclude_unset=True, exclude={"columns", "pk_column", "sub_table", "sub"})
-        obj = await self.update(id=table_id, data=data_dict)
-        return GenTableSchema.model_validate(obj)
+        return await self.update(id=table_id, data=edit_model.model_dump(exclude_unset=True, exclude={"columns"}))
 
     async def delete_gen_table(self, ids: List[int]) -> None:
         """
@@ -132,8 +129,7 @@ class GenTableCRUD(CRUDBase[GenTableModel, GenTableSchema, GenTableSchema]):
         """
 
         # 使用更健壮的方式检测数据库方言
-        if settings.DATABASE_TYPE == "postgresql":
-            # 修复：PostgreSQL不提供table_comment，使用pg_catalog获取注释
+        if settings.DATABASE_TYPE == "postgres":
             query_sql = (
                 select(
                     text("t.table_catalog as database_name"),
@@ -155,7 +151,7 @@ class GenTableCRUD(CRUDBase[GenTableModel, GenTableSchema, GenTableSchema]):
                     )
                 )
             )
-        elif settings.DATABASE_TYPE == "mysql":
+        else:
             query_sql = (
                 select(
                     text("table_schema as database_name"),
@@ -170,38 +166,19 @@ class GenTableCRUD(CRUDBase[GenTableModel, GenTableSchema, GenTableSchema]):
                     )
                 )
             )
-        else:
-            query_sql = (
-                select(
-                    text("'fastapiadmin' as database_name"),  # SQLite没有数据库名概念，设为空字符串
-                    text("name as table_name"),
-                    text("type as table_type"),
-                    text("name as table_comment"),  # SQLite中使用name作为表名和注释
-                )
-                .select_from(text("sqlite_master"))
-                .where(
-                    and_(
-                        text("type = 'table'"),
-                    )   
-                )
-            )
         
         # 动态条件构造
         params = {}
         if search and search.table_name:
-            if settings.DATABASE_TYPE == "sqlite":
-                query_sql = query_sql.where(
-                    text("lower(name) like lower(:table_name)")
-                )
-            else:
-                query_sql = query_sql.where(
-                    text("lower(table_name) like lower(:table_name)")
-                )
+            query_sql = query_sql.where(
+                text("lower(table_name) like lower(:table_name)")
+            )
             params['table_name'] = f"%{search.table_name}%"
         if search and search.table_comment:
-            if settings.DATABASE_TYPE == "sqlite":
+            # 对于PostgreSQL，表注释字段是pd.description，而不是table_comment
+            if settings.DATABASE_TYPE == "postgres":
                 query_sql = query_sql.where(
-                    text("lower(name) like lower(:table_comment)")
+                    text("lower(pd.description) like lower(:table_comment)")
                 )
             else:
                 query_sql = query_sql.where(
@@ -235,78 +212,58 @@ class GenTableCRUD(CRUDBase[GenTableModel, GenTableSchema, GenTableSchema]):
         返回:
         - list[GenDBTableSchema]: 数据库表信息对象列表。
         """
+        # 处理空列表情况
+        if not table_names:
+            return []
+            
         # 使用更健壮的方式检测数据库方言
-        if settings.DATABASE_TYPE == "postgresql":
-            # 修复：PostgreSQL不提供table_comment，使用pg_catalog获取注释
-            query_sql = (
-                select(
-                    text("t.table_catalog as database_name"),
-                    text("t.table_name as table_name"),
-                    text("t.table_type as table_type"),
-                    text("pd.description as table_comment"),
-                )
-                .select_from(text(
-                    "information_schema.tables t \n"
-                    "LEFT JOIN pg_catalog.pg_class c ON c.relname = t.table_name \n"
-                    "LEFT JOIN pg_catalog.pg_namespace n ON n.nspname = t.table_schema AND c.relnamespace = n.oid \n"
-                    "LEFT JOIN pg_catalog.pg_description pd ON pd.objoid = c.oid AND pd.objsubid = 0"
-                ))
-                .where(
-                    and_(
-                        text("t.table_catalog = (select current_database())"),
-                        text("t.is_insertable_into = 'YES'"),
-                        text("t.table_schema = 'public'"),
-                    )
-                )
-            )
-        elif settings.DATABASE_TYPE == "mysql":
-            query_sql = (
-                select(
-                    text("table_schema as database_name"),
-                    text("table_name as table_name"),
-                    text("table_type as table_type"),
-                    text("table_comment as table_comment"),
-                )
-                .select_from(text("information_schema.tables"))
-                .where(
-                    and_(
-                        text("table_schema = (select database())"),
-                    )
-                )
-            )
+        if settings.DATABASE_TYPE == "postgres":
+            # PostgreSQL使用ANY操作符和正确的参数绑定
+            query_sql = """
+            SELECT
+                t.table_catalog as database_name,
+                t.table_name as table_name,
+                t.table_type as table_type,
+                pd.description as table_comment
+            FROM
+                information_schema.tables t
+            LEFT JOIN pg_catalog.pg_class c ON c.relname = t.table_name
+            LEFT JOIN pg_catalog.pg_namespace n ON n.nspname = t.table_schema AND c.relnamespace = n.oid
+            LEFT JOIN pg_catalog.pg_description pd ON pd.objoid = c.oid AND pd.objsubid = 0
+            WHERE
+                t.table_catalog = (select current_database()) 
+                AND t.is_insertable_into = 'YES'
+                AND t.table_schema = 'public'
+                AND t.table_name = ANY(:table_names)
+            """
         else:
-            query_sql = (
-                select(
-                    text("'fastapiadmin' as database_name"),  # SQLite没有数据库名概念，设为空字符串
-                    text("name as table_name"),
-                    text("type as table_type"),
-                    text("name as table_comment"),  # SQLite中使用name作为表名和注释
-                )
-                .select_from(text("sqlite_master"))
-                .where(
-                    and_(
-                        text("type = 'table'"),
-                    )   
-                )
-            )
+            query_sql = """
+            SELECT
+                table_schema as database_name,
+                table_name as table_name,
+                table_type as table_type,
+                table_comment as table_comment
+            FROM
+                information_schema.tables
+            WHERE
+                table_schema = (select database())
+                AND table_name IN :table_names
+            """
         
-        table_names_str = "','".join(table_names)
-        # 修复SQL查询中的参数绑定问题
-        if table_names:
-            if settings.DATABASE_TYPE == "sqlite":
-                # 对于SQLite，我们直接在SQL中使用表名，因为参数绑定有问题
-                query_sql = query_sql.where(
-                    text(f"name IN ('{table_names_str}')")
-                )
-                gen_db_table_list = (await self.db.execute(query_sql)).fetchall()
+        # 创建新的数据库会话上下文来执行查询，避免受外部事务状态影响
+        try:
+            # 去重表名列表，避免重复查询
+            unique_table_names = list(set(table_names))
+            
+            # 使用只读事务执行查询，不影响主事务
+            if settings.DATABASE_TYPE == "postgres":
+                gen_db_table_list = (await self.db.execute(text(query_sql), {"table_names": unique_table_names})).fetchall()
             else:
-                # MySQL和PostgreSQL使用IN拼接（注意已在上方限定schema范围）
-                query_sql = query_sql.where(
-                    text(f"table_name IN ('{table_names_str}')")
-                )
-                gen_db_table_list = (await self.db.execute(query_sql)).fetchall()
-        else:
-            gen_db_table_list = (await self.db.execute(query_sql)).fetchall()
+                gen_db_table_list = (await self.db.execute(text(query_sql), {"table_names": tuple(unique_table_names)})).fetchall()
+        except Exception as e:
+            logger.error(f"查询表信息时发生错误: {e}")
+            # 查询错误时直接抛出，不需要事务处理
+            raise
         
         # 将Row对象转换为字典列表，解决JSON序列化问题
         dict_data = []
@@ -335,13 +292,8 @@ class GenTableCRUD(CRUDBase[GenTableModel, GenTableSchema, GenTableSchema]):
             # 根据不同数据库类型使用不同的查询方式
             if settings.DATABASE_TYPE.lower() == 'mysql':
                 query = text("SELECT 1 FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = :table_name")
-            elif settings.DATABASE_TYPE.lower() == 'postgresql':
-                query = text("SELECT 1 FROM pg_tables WHERE tablename = :table_name")
-            elif settings.DATABASE_TYPE.lower() == 'sqlite':
-                query = text("SELECT name FROM sqlite_master WHERE type='table' AND name = :table_name")
             else:
-                # 默认查询方式
-                query = text("SELECT 1 FROM information_schema.tables WHERE table_name = :table_name")
+                query = text("SELECT 1 FROM pg_tables WHERE tablename = :table_name")
             
             result = await self.db.execute(query, {"table_name": table_name})
             return result.scalar() is not None
@@ -350,7 +302,7 @@ class GenTableCRUD(CRUDBase[GenTableModel, GenTableSchema, GenTableSchema]):
             # 出错时返回False，避免误报表已存在
             return False
             
-    async def create_table_by_sql(self, sql: str) -> bool:
+    async def create_table_by_sql(self, sql_statements: List[Expression | None]) -> bool:
         """
         根据SQL语句创建表结构。
 
@@ -360,10 +312,15 @@ class GenTableCRUD(CRUDBase[GenTableModel, GenTableSchema, GenTableSchema]):
         返回:
         - bool: 是否创建成功。
         """
+        
+
         try:
             # 执行SQL但不手动提交事务，由框架管理事务生命周期
-            await self.db.execute(text(sql))
-            await self.db.flush()
+            for sql_statement in sql_statements:
+                if not sql_statement:
+                    continue
+                sql = sql_statement.sql(dialect=settings.DATABASE_TYPE)
+                await self.db.execute(text(sql))
             return True
         except Exception as e:
             logger.error(f"创建表时发生错误: {e}")
@@ -433,93 +390,105 @@ class GenTableColumnCRUD(CRUDBase[GenTableColumnModel, GenTableColumnSchema, Gen
         if not table_name:
             raise ValueError("数据表名称不能为空")
 
-        # 兼容SQLite和MySQL/PostgreSQL
-        if settings.DATABASE_TYPE == "postgresql":
-            # 修复：PostgreSQL的主键/自增/注释需要关联系统表
-            query_sql = """
-                SELECT
-                    c.column_name,
-                    (CASE WHEN (c.is_nullable = 'NO' AND (tc.constraint_type IS DISTINCT FROM 'PRIMARY KEY')) THEN '1' ELSE '0' END) AS is_required,
-                    (CASE WHEN (tc.constraint_type = 'PRIMARY KEY') THEN '1' ELSE '0' END) AS is_pk,
-                    (CASE WHEN EXISTS (SELECT 1 FROM information_schema.table_constraints uc JOIN information_schema.key_column_usage kcu ON uc.constraint_name = kcu.constraint_name WHERE uc.table_name = c.table_name AND uc.table_schema = c.table_schema AND uc.constraint_type = 'UNIQUE' AND kcu.column_name = c.column_name) THEN '1' ELSE '0' END) AS is_unique,
-                    c.ordinal_position AS sort,
-                    COALESCE(pgd.description, '') AS column_comment,
-                    (CASE WHEN c.column_default LIKE 'nextval%' THEN '1' ELSE '0' END) AS is_increment,
-                    c.udt_name AS column_type,
-                    c.character_maximum_length AS column_length,
-                    c.column_default AS column_default
-                FROM information_schema.columns c
-                LEFT JOIN information_schema.key_column_usage kcu
-                  ON c.table_name = kcu.table_name AND c.column_name = kcu.column_name AND kcu.table_schema = c.table_schema
-                LEFT JOIN information_schema.table_constraints tc
-                  ON tc.constraint_name = kcu.constraint_name AND tc.table_name = c.table_name AND tc.table_schema = c.table_schema
-                LEFT JOIN pg_catalog.pg_statio_all_tables st
-                  ON st.relname = c.table_name
-                LEFT JOIN pg_catalog.pg_description pgd
-                  ON pgd.objoid = st.relid AND pgd.objsubid = c.ordinal_position
-                WHERE c.table_catalog = current_database()
-                  AND c.table_schema = 'public'
-                  AND c.table_name = :table_name
-                ORDER BY c.ordinal_position
-            """
-        elif settings.DATABASE_TYPE == "mysql":
-            query_sql = """
-                SELECT
-                    c.column_name,
-                    (CASE WHEN (c.is_nullable = 'NO' AND c.column_key != 'PRI') THEN '1' ELSE '0' END) AS is_required,
-                    (CASE WHEN c.column_key = 'PRI' THEN '1' ELSE '0' END) AS is_pk,
-                    (CASE WHEN EXISTS (SELECT 1 FROM information_schema.statistics s WHERE s.table_schema = c.table_schema AND s.table_name = c.table_name AND s.column_name = c.column_name AND s.non_unique = 0 AND s.index_name != 'PRIMARY') THEN '1' ELSE '0' END) AS is_unique,
-                    c.ordinal_position AS sort,
-                    c.column_comment,
-                    (CASE WHEN c.extra = 'auto_increment' THEN '1' ELSE '0' end) AS is_increment,
-                    c.column_type,
-                    c.character_maximum_length AS column_length,
-                    c.column_default AS column_default
-                FROM 
-                    information_schema.columns c
-                WHERE 
-                    c.table_schema = (SELECT DATABASE())
-                    AND c.table_name = :table_name
-                ORDER BY c.ordinal_position
-            """
-        else:
-            # 修复SQLite查询语句，使用PRAGMA获取表结构信息
-            query_sql = """
-                SELECT
-                    name as column_name,
-                    (CASE WHEN (type != '' AND pk != 1) THEN '1' ELSE '0' END) AS is_required,
-                    (CASE WHEN pk = 1 THEN '1' ELSE '0' END) AS is_pk,
-                    (CASE WHEN (SELECT COUNT(*) FROM pragma_index_list(:table_name) pil JOIN pragma_index_info(pil.name) pii ON 1=1 WHERE pil.unique = 1 AND pii.name = pragma_table_info.name AND pil.name NOT LIKE 'sqlite_%') > 0 THEN '1' ELSE '0' END) AS is_unique,
-                    cid AS sort,
-                    '' as column_comment,
-                    (CASE WHEN type LIKE '%AUTOINCREMENT%' THEN '1' ELSE '0' END) AS is_increment,
-                    type as column_type,
-                    (CASE WHEN type LIKE 'varchar(%' OR type LIKE 'char(%' THEN substr(type, instr(type, '(') + 1, instr(type, ')') - instr(type, '(') - 1) ELSE NULL END) AS column_length,
-                    dflt_value AS column_default
-                FROM 
-                    pragma_table_info(:table_name)
-                ORDER BY cid
-            """
-        
-        query = text(query_sql).bindparams(table_name=table_name)
-        rows = (await self.db.execute(query)).fetchall()
-        result = [
-            GenTableColumnOutSchema(
-                column_name=row[0],
-                is_required=row[1],
-                is_pk=row[2],
-                is_unique=row[3],
-                sort=row[4],
-                column_comment=row[5],
-                is_increment=row[6],
-                column_type=row[7],
-                column_length=str(row[8]) if row[8] is not None else None,
-                column_default=str(row[9]) if row[9] is not None else None
-            )
-            for row in rows
-        ]
-        
-        return result
+        try:
+            if settings.DATABASE_TYPE == "mysql":
+                query_sql = """
+                    SELECT
+                        c.column_name AS column_name,
+                        c.column_comment AS column_comment,
+                        c.column_type AS column_type,
+                        c.character_maximum_length AS column_length,
+                        c.column_default AS column_default,
+                        c.ordinal_position AS sort,
+                        (CASE WHEN c.column_key = 'PRI' THEN 1 ELSE 0 END) AS is_pk,
+                        (CASE WHEN c.extra = 'auto_increment' THEN 1 ELSE 0 END) AS is_increment,
+                        (CASE WHEN (c.is_nullable = 'NO' AND c.column_key != 'PRI') THEN 1 ELSE 0 END) AS is_nullable,
+                        (CASE 
+                            WHEN c.column_name IN (
+                                SELECT k.column_name
+                                FROM information_schema.key_column_usage k
+                                JOIN information_schema.table_constraints t
+                                ON k.constraint_name = t.constraint_name
+                                WHERE k.table_schema = c.table_schema
+                                AND k.table_name = c.table_name
+                                AND t.constraint_type = 'UNIQUE'
+                            ) THEN 1 ELSE 0 
+                        END) AS is_unique
+                    FROM 
+                        information_schema.columns c
+                    WHERE c.table_schema = (SELECT DATABASE())
+                        AND c.table_name = :table_name
+                    ORDER BY 
+                        c.ordinal_position
+                """
+            else:
+                query_sql = """
+                    SELECT
+                        c.column_name AS column_name,
+                        COALESCE(pgd.description, '') AS column_comment,
+                        c.udt_name AS column_type,
+                        c.character_maximum_length AS column_length,
+                        c.column_default AS column_default,
+                        c.ordinal_position AS sort,
+                        (CASE WHEN EXISTS (
+                            SELECT 1 FROM information_schema.table_constraints tc
+                            JOIN information_schema.constraint_column_usage ccu ON tc.constraint_name = ccu.constraint_name
+                            WHERE tc.table_name = c.table_name
+                            AND tc.constraint_type = 'PRIMARY KEY'
+                            AND ccu.column_name = c.column_name
+                        ) THEN 1 ELSE 0 END) AS is_pk,
+                        (CASE WHEN c.column_default LIKE 'nextval%' THEN 1 ELSE 0 END) AS is_increment,
+                        (CASE WHEN c.is_nullable = 'NO' THEN 1 ELSE 0 END) AS is_nullable,
+                        (CASE WHEN EXISTS (
+                            SELECT 1 FROM information_schema.table_constraints tc
+                            JOIN information_schema.constraint_column_usage ccu ON tc.constraint_name = ccu.constraint_name
+                            WHERE tc.table_name = c.table_name
+                            AND tc.constraint_type = 'UNIQUE'
+                            AND ccu.column_name = c.column_name
+                        ) THEN 1 ELSE 0 END) AS is_unique
+                    FROM
+                        information_schema.columns c
+                    LEFT JOIN pg_catalog.pg_description pgd ON 
+                        pgd.objoid = (SELECT oid FROM pg_class WHERE relname = c.table_name)
+                        AND pgd.objsubid = c.ordinal_position
+                    WHERE c.table_catalog = current_database()
+                        AND c.table_schema = 'public'
+                        AND c.table_name = :table_name
+                    ORDER BY 
+                        c.ordinal_position
+                """
+            
+            query = text(query_sql).bindparams(table_name=table_name)
+            result = await self.db.execute(query)
+            rows = result.fetchall() if result else []
+            
+            # 确保rows是可迭代对象
+            if not rows:
+                return []
+            
+            columns_list = []
+            for row in rows:
+                # 防御性编程：检查row是否有足够的元素
+                if len(row) >= 10:
+                    columns_list.append(
+                        GenTableColumnOutSchema(
+                            column_name=row[0],
+                            column_comment=row[1],
+                            column_type=row[2],
+                            column_length=str(row[3]) if row[3] is not None else '',
+                            column_default=str(row[4]) if row[4] is not None else '',
+                            sort=row[5],
+                            is_pk=row[6],
+                            is_increment=row[7],
+                            is_nullable=row[8],
+                            is_unique=row[9],
+                        )
+                    )
+            return columns_list
+        except Exception as e:
+            logger.error(f"获取表{table_name}的字段列表时出错: {str(e)}")
+            # 确保即使出错也返回空列表而不是None
+            raise
 
     async def list_gen_table_column_crud(self, search: Optional[Dict] = None, order_by: Optional[List[Dict[str, str]]] = None, preload: Optional[List[Union[str, Any]]] = None) -> Sequence[GenTableColumnModel]:
         """根据业务表字段查询业务表字段列表。
@@ -559,7 +528,7 @@ class GenTableColumnCRUD(CRUDBase[GenTableColumnModel, GenTableColumnSchema, Gen
         data_dict = data.model_dump(exclude_unset=True)
         return await self.update(id=id, data=data_dict)
 
-    async def delete_gen_table_column_by_table_id_dao(self, table_ids: List[int]) -> None:
+    async def delete_gen_table_column_by_table_id_crud(self, table_ids: List[int]) -> None:
         """根据业务表ID批量删除业务表字段。
 
         参数:
@@ -577,7 +546,7 @@ class GenTableColumnCRUD(CRUDBase[GenTableColumnModel, GenTableColumnSchema, Gen
         if column_ids:
             await self.delete(ids=column_ids)
 
-    async def delete_gen_table_column_by_column_id_dao(self, column_ids: List[int]) -> None:
+    async def delete_gen_table_column_by_column_id_crud(self, column_ids: List[int]) -> None:
         """根据业务表字段ID批量删除业务表字段。
 
         参数:

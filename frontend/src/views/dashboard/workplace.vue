@@ -186,7 +186,7 @@ defineOptions({
 import { EChartsOption } from 'echarts'
 import { useUserStore } from "@/store/index";
 import { greetings } from '@/utils/common';
-import NoticeAPI, { NoticeTable } from '@/api/system/notice';
+import NoticeAPI, { NoticeTable } from '@/api/module_system/notice';
 import { ref, onMounted, reactive } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';

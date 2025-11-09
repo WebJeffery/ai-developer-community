@@ -1,5 +1,5 @@
 import { store } from "@/store";
-import NoticeAPI, { NoticeTable } from "@/api/system/notice";
+import NoticeAPI, { NoticeTable } from "@/api/module_system/notice";
 
 export const useNoticeStore = defineStore("notice", {
   state: () => ({

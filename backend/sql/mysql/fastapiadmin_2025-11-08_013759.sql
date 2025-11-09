@@ -278,7 +278,7 @@ CREATE TABLE `gen_table_column` (
   `python_field` varchar(200) DEFAULT NULL COMMENT 'PYTHON字段名',
   `is_pk` varchar(1) DEFAULT NULL COMMENT '是否主键（1是）',
   `is_increment` varchar(1) DEFAULT NULL COMMENT '是否自增（1是）',
-  `is_required` varchar(1) DEFAULT NULL COMMENT '是否必填（1是）',
+  `is_nullable` varchar(1) DEFAULT NULL COMMENT '是否必填（1是）',
   `is_unique` varchar(1) DEFAULT NULL COMMENT '是否唯一（1是）',
   `is_insert` varchar(1) DEFAULT NULL COMMENT '是否为插入字段（1是）',
   `is_edit` varchar(1) DEFAULT NULL COMMENT '是否编辑字段（1是）',

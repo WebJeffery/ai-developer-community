@@ -340,7 +340,7 @@ class SqlalchemyUtil:
         :param need_explicit_null: 是否需要显式DEFAULT NULL
         :return: 不同数据库方言对应的null_server_default
         """
-        if need_explicit_null and dialect_name == 'postgresql':
+        if need_explicit_null and dialect_name == 'postgres':
             return null()
         return None
 

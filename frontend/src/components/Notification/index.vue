@@ -75,7 +75,7 @@
 </template>
 
 <script setup lang="ts">
-import NoticeAPI, { NoticeTable } from "@/api/system/notice";
+import NoticeAPI, { NoticeTable } from "@/api/module_system/notice";
 import router from "@/router";
 import { useNoticeStore } from "@/store";
 

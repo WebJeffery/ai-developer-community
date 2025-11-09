@@ -357,13 +357,13 @@ class GenConstant:
     # 数据库字符串类型
     COLUMNTYPE_STR = (
         ['character varying', 'varchar', 'character', 'char']
-        if settings.DATABASE_TYPE == 'postgresql'
+        if settings.DATABASE_TYPE == 'postgres'
         else ['char', 'varchar', 'nvarchar', 'varchar2']
     )
 
     # 数据库文本类型
     COLUMNTYPE_TEXT = (
-        ['text', 'citext'] if settings.DATABASE_TYPE == 'postgresql' else ['tinytext', 'text', 'mediumtext', 'longtext']
+        ['text', 'citext'] if settings.DATABASE_TYPE == 'postgres' else ['tinytext', 'text', 'mediumtext', 'longtext']
     )
 
     # 数据库时间类型
@@ -378,14 +378,14 @@ class GenConstant:
             'timestamp without time zone',
             'interval',
         ]
-        if settings.DATABASE_TYPE == 'postgresql'
+        if settings.DATABASE_TYPE == 'postgres'
         else ['datetime', 'time', 'date', 'timestamp']
     )
 
     # 数据库字空间类型
     COLUMNTYPE_GEOMETRY = (
         ['point', 'line', 'lseg', 'box', 'path', 'polygon', 'circle']
-        if settings.DATABASE_TYPE == 'postgresql'
+        if settings.DATABASE_TYPE == 'postgres'
         else [
             'geometry',
             'point',
@@ -478,7 +478,7 @@ class GenConstant:
     QUERY_EQ = 'EQ'
     
     # 需要
-    REQUIRE = '1'
+    REQUIRE = True
     
     # 数据库类型与sqlalchemy类型映射
     DB_TO_SQLALCHEMY = (
@@ -537,7 +537,7 @@ class GenConstant:
             'oidvector': 'ARRAY',
             'pg_node_tree': 'Text',
         }
-        if settings.DATABASE_TYPE == 'postgresql'
+        if settings.DATABASE_TYPE == 'postgres'
         else {
             # 数值类型
             'TINYINT': 'SmallInteger',
@@ -647,7 +647,7 @@ class GenConstant:
             'oidvector': 'list',
             'pg_node_tree': 'str',
         }
-        if settings.DATABASE_TYPE == 'postgresql'
+        if settings.DATABASE_TYPE == 'postgres'
         else {
             # 数值类型
             'TINYINT': 'int',

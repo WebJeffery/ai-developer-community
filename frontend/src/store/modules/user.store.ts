@@ -1,8 +1,8 @@
 import { store, useTagsViewStore, usePermissionStoreHook, useDictStoreHook } from "@/store";
 
-import AuthAPI, {type LoginFormData } from "@/api/system/auth";
-import UserAPI, {type UserInfo }  from "@/api/system/user";
-import type { MenuTable } from "@/api/system/menu";
+import AuthAPI, {type LoginFormData } from "@/api/module_system/auth";
+import UserAPI, {type UserInfo }  from "@/api/module_system/user";
+import type { MenuTable } from "@/api/module_system/menu";
 import { Auth } from "@/utils/auth";
 
 export const useUserStore = defineStore("user", {
