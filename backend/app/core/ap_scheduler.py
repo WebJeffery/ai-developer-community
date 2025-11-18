@@ -21,7 +21,7 @@ from concurrent.futures import ThreadPoolExecutor
 from app.config.setting import settings
 from app.core.database import engine, db_session, async_db_session
 from app.core.exceptions import CustomException
-from app.core.logger import logger
+from app.core.logger import log
 from app.utils.cron_util import CronUtil
 
 from app.api.v1.module_application.job.model import JobModel
@@ -143,7 +143,7 @@ class SchedulerUtil:
                 session.commit()
             except Exception as e:
                 session.rollback()
-                logger.error(f"保存任务日志失败: {str(e)}")
+                log.error(f"保存任务日志失败: {str(e)}")
             finally:
                 session.close()
 
@@ -158,7 +158,7 @@ class SchedulerUtil:
         # 延迟导入避免循环导入
         from app.api.v1.module_application.job.crud import JobCRUD
         from app.api.v1.module_system.auth.schema import AuthSchema
-        logger.info('🔎 开始启动定时任务...')
+        log.info('🔎 开始启动定时任务...')
         scheduler.start()
         async with async_db_session() as session:
             async with session.begin():
@@ -172,7 +172,7 @@ class SchedulerUtil:
                         # 如果任务状态为暂停，则立即暂停刚添加的任务
                         cls.pause_job(job_id=item.id)
         scheduler.add_listener(cls.scheduler_event_listener, EVENT_ALL)
-        logger.info('✅️ 系统初始定时任务加载成功')
+        log.info('✅️ 系统初始定时任务加载成功')
 
     @classmethod
     async def close_system_scheduler(cls):
@@ -187,9 +187,9 @@ class SchedulerUtil:
             scheduler.remove_all_jobs()
             # 等待所有任务完成后再关闭
             scheduler.shutdown(wait=True)
-            logger.info('✅️ 关闭定时任务成功')
+            log.info('✅️ 关闭定时任务成功')
         except Exception as e:
-            logger.error(f'关闭定时任务失败: {str(e)}')
+            log.error(f'关闭定时任务失败: {str(e)}')
 
     @classmethod
     def get_job(cls, job_id: Union[str, int]) -> Optional[Job]:
