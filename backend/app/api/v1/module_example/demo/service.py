@@ -179,9 +179,9 @@ class DemoService:
             'name': '名称', 
             'status': '状态',
             'description': '备注',
-            'created_at': '创建时间',
-            'updated_at': '更新时间',
-            'creator': '创建者',
+            'created_time': '创建时间',
+            'updated_time': '更新时间',
+            'created_id': '创建者',
         }
 
         # 复制数据并转换状态
@@ -190,11 +190,11 @@ class DemoService:
             # 处理状态
             item['status'] = '正常' if item.get('status') else '停用'
             # 处理创建者
-            creator_info = item.get('creator')
+            creator_info = item.get('created_id')
             if isinstance(creator_info, dict):
-                item['creator'] = creator_info.get('name', '未知')
+                item['created_id'] = creator_info.get('name', '未知')
             else:
-                item['creator'] = '未知'
+                item['created_id'] = '未知'
 
         return ExcelUtil.export_list2excel(list_data=data, mapping_dict=mapping_dict)
 

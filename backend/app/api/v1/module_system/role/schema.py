@@ -62,7 +62,7 @@ class RoleOptionsOut(RoleCreateSchema):
     model_config = ConfigDict(from_attributes=True)
 
     id: int = Field(..., description="主键ID")
-    created_at: DateTimeStr = Field(..., description="创建时间")
-    updated_at: DateTimeStr = Field(..., description="更新时间")
+    created_time: DateTimeStr = Field(..., description="创建时间")
+    updated_time: DateTimeStr = Field(..., description="更新时间")
     menus: List[MenuOutSchema] = Field(default_factory=list, description='角色菜单列表')
     depts: List[DeptOutSchema] = Field(default_factory=list, description='角色部门列表')

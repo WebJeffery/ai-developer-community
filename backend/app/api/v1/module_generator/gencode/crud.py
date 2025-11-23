@@ -81,7 +81,7 @@ class GenTableCRUD(CRUDBase[GenTableModel, GenTableSchema, GenTableSchema]):
         返回:
         - Sequence[GenTableModel]: 业务表列表信息。
         """
-        return await self.list(search=search.__dict__, order_by=[{"created_at": "desc"}], preload=preload)
+        return await self.list(search=search.__dict__, order_by=[{"created_time": "desc"}], preload=preload)
 
     async def add_gen_table(self, add_model: GenTableSchema) -> GenTableModel:
         """

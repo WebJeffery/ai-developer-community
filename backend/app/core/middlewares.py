@@ -124,7 +124,7 @@ class RequestLogMiddleware(BaseHTTPMiddleware):
             response_info = (
                 f"响应状态: {response.status_code}, "
                 f"响应内容长度: {content_length}, "
-                f"处理时间: {process_time * 1000}ms"
+                f"处理时间: {round(process_time * 1000, 3)}ms"
             )
             log.info(response_info)
             

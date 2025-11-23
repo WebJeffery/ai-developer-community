@@ -94,9 +94,9 @@ async def get_current_user(
         username=username, 
         preload=[
             "dept", 
-            selectinload(UserModel.roles).selectinload(RoleModel.creator),
+            selectinload(UserModel.roles).selectinload(RoleModel.created_by),
             "positions", 
-            "creator"
+            "created_by"
         ]
     )
     if not user:

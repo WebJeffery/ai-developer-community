@@ -171,8 +171,8 @@ class RoleService:
             'data_scope': '数据权限',
             'status': '状态',
             'description': '备注',
-            'created_at': '创建时间',
-            'updated_at': '更新时间',
+            'created_time': '创建时间',
+            'updated_time': '更新时间',
             'created_id': '创建者ID',
             'creator': '创建者',
         }

@@ -27,7 +27,7 @@ class JobQueryParam:
         
         # 时间范围查询
         if start_time and end_time:
-            self.created_at = ("between", (start_time, end_time))
+            self.created_time = ("between", (start_time, end_time))
 
 
 class JobLogQueryParam:

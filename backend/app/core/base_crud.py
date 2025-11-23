@@ -9,14 +9,10 @@ from sqlalchemy import asc, func, select, delete, Select, desc, update, or_, and
 from sqlalchemy import inspect as sa_inspect
 
 from app.core.base_model import MappedBase
-from app.utils.common_util import get_child_id_map, get_child_recursion
 from app.core.exceptions import CustomException
+from app.core.permission import Permission
 from app.common.request import PageResultSchema
-from app.core.serialize import Serialize
-
 from app.api.v1.module_system.auth.schema import AuthSchema
-from app.api.v1.module_system.dept.model import DeptModel
-from app.api.v1.module_system.user.model import UserModel
 
 ModelType = TypeVar("ModelType", bound=MappedBase)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
@@ -322,105 +318,13 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         """
         过滤数据权限（仅用于Select）。
         """
-        perm = await self.__permission_condition()
-        if perm is None:
-            return sql
-        return sql.where(perm)
-
-    async def __permission_condition(self) -> Optional[ColumnElement]:
-        """
-        构造权限过滤表达式，返回None表示不限制。
-        """
-        # 如果不需要检查数据权限,则不限制
-        if not self.current_user or not self.auth.check_data_scope:
-            return None
-
-        # 如果模型没有创建人created_id字段,则不限制
-        if not hasattr(self.model, "created_id"):
-            return None
-        
-        # 超级管理员可以查看所有数据
-        if getattr(self.current_user, "is_superuser", False):
-            return None
-            
-        # 如果用户没有部门或角色,则只能查看自己的数据
-        if not getattr(self.current_user, "dept_id", None) or not getattr(self.current_user, "roles", None):
-            created_id_attr = getattr(self.model, "created_id", None)
-            if created_id_attr is not None:
-                return created_id_attr == self.current_user.id
-            return None
-        
-        # 获取用户所有角色的权限范围
-        data_scopes = set()
-        dept_ids = set()
-        roles = getattr(self.current_user, "roles", []) or []
-        
-        for role in roles:
-            # 角色的部门集合
-            if hasattr(role, 'depts') and role.depts:
-                for dept in role.depts:
-                    dept_ids.add(dept.id)
-            data_scopes.add(role.data_scope)
-        
-        # 如果有全部数据权限，直接返回
-        if 4 in data_scopes:
-            # 全部数据权限
-            return None
-
-        # 如果有自定义数据权限且部门ID存在，优先处理
-        if 5 in data_scopes and dept_ids:
-            # 自定义数据权限
-            creator_rel = getattr(self.model, "creator", None)
-            if hasattr(UserModel, 'dept_id') and creator_rel is not None:
-                return creator_rel.has(getattr(UserModel, 'dept_id').in_(list(dept_ids)))
-            else:
-                created_id_attr = getattr(self.model, "created_id", None)
-                if created_id_attr is not None:
-                    return created_id_attr == self.current_user.id
-                return None
-
-        # 处理其他数据权限范围
-        dept_id_val = getattr(self.current_user, "dept_id", None)
-        
-        if 1 in data_scopes:
-            # 仅本人数据
-            created_id_attr = getattr(self.model, "created_id", None)
-            if created_id_attr is not None:
-                return created_id_attr == self.current_user.id
-            return None
-
-        if 2 in data_scopes and dept_id_val is not None:
-            # 本部门数据
-            dept_ids.add(dept_id_val)
-            
-        if 3 in data_scopes and dept_id_val is not None:
-            # 本部门及以下数据（查询所有部门并递归）
-            dept_sql = select(DeptModel)
-            dept_result = await self.db.execute(dept_sql)
-            dept_objs = dept_result.scalars().all()
-            id_map = get_child_id_map(dept_objs)
-            dept_child_ids = get_child_recursion(id=dept_id_val, id_map=id_map)
-            dept_ids.add(dept_id_val)  # 包含本部门
-            for child_id in dept_child_ids:
-                dept_ids.add(child_id)
-
-        # 处理2、3汇总的数据权限
-        if (2 in data_scopes or 3 in data_scopes) and dept_ids:
-            # 使用关系creator进行筛选（若存在），否则回退到仅本人数据
-            creator_rel = getattr(self.model, "creator", None)
-            if hasattr(UserModel, 'dept_id') and creator_rel is not None and dept_ids:
-                return creator_rel.has(getattr(UserModel, 'dept_id').in_(list(dept_ids)))
-            else:
-                created_id_attr = getattr(self.model, "created_id", None)
-                if created_id_attr is not None:
-                    return created_id_attr == self.current_user.id
-                return None
-
-        # 默认情况下，只能查看自己的数据
-        created_id_attr = getattr(self.model, "created_id", None)
-        if created_id_attr is not None:
-            return created_id_attr == self.current_user.id
-        return None
+        filter = Permission(
+            db=self.db,
+            model=self.model,
+            current_user=self.current_user,
+            auth=self.auth
+        )
+        return await filter.filter_query(sql)
 
     async def __build_conditions(self, **kwargs) -> List[ColumnElement]:
         """

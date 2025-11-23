@@ -28,7 +28,7 @@ class DictTypeQueryParam:
         
         # 时间范围查询
         if start_time and end_time:
-            self.created_at = ("between", (start_time, end_time))
+            self.created_time = ("between", (start_time, end_time))
 
 
 class DictDataQueryParam:
@@ -52,4 +52,4 @@ class DictDataQueryParam:
         
         # 时间范围查询
         if start_time and end_time:
-            self.created_at = ("between", (start_time, end_time))
+            self.created_time = ("between", (start_time, end_time))

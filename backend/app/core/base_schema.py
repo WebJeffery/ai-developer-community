@@ -33,13 +33,17 @@ class BaseSchema(BaseModel):
     description: Optional[str] = Field(default=None, description="描述")
     created_time: Optional[DateTimeStr] = Field(default=None, description="创建时间")
     updated_time: Optional[DateTimeStr] = Field(default=None, description="更新时间")
+
+class BaseCreateSchema(BaseModel):
+    """通用创建模型，包含基础字段和审计字段"""
+    model_config = ConfigDict(from_attributes=True)
+
     created_id: Optional[int] = Field(default=None, description="创建人ID")
     created_by: Optional[UserInfoSchema] = Field(default=None, description="创建人信息")
     updated_id: Optional[int] = Field(default=None, description="更新人ID")
     updated_by: Optional[UserInfoSchema] = Field(default=None, description="更新人信息")
 
-
-class TenantSchema(BaseSchema):
+class TenantSchema(BaseModel):
     """租户模型"""
     model_config = ConfigDict(from_attributes=True)
 
@@ -47,7 +51,7 @@ class TenantSchema(BaseSchema):
     tenant: Optional[CommonSchema] = Field(default=None, description="租户信息")
 
 
-class CustomerSchema(BaseSchema):
+class CustomerSchema(BaseModel):
     """客户模型"""
     model_config = ConfigDict(from_attributes=True)
 

@@ -46,8 +46,8 @@ CREATE TABLE public.app_ai_mcp (
     creator_id integer,
     id integer NOT NULL,
     description text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_time timestamp without time zone,
+    updated_time timestamp without time zone
 );
 
 
@@ -124,17 +124,17 @@ COMMENT ON COLUMN public.app_ai_mcp.description IS '备注/描述';
 
 
 --
--- Name: COLUMN app_ai_mcp.created_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN app_ai_mcp.created_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.app_ai_mcp.created_at IS '创建时间';
+COMMENT ON COLUMN public.app_ai_mcp.created_time IS '创建时间';
 
 
 --
--- Name: COLUMN app_ai_mcp.updated_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN app_ai_mcp.updated_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.app_ai_mcp.updated_at IS '更新时间';
+COMMENT ON COLUMN public.app_ai_mcp.updated_time IS '更新时间';
 
 
 --
@@ -180,8 +180,8 @@ CREATE TABLE public.app_job (
     creator_id integer,
     id integer NOT NULL,
     description text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_time timestamp without time zone,
+    updated_time timestamp without time zone
 );
 
 
@@ -307,17 +307,17 @@ COMMENT ON COLUMN public.app_job.description IS '备注/描述';
 
 
 --
--- Name: COLUMN app_job.created_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN app_job.created_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.app_job.created_at IS '创建时间';
+COMMENT ON COLUMN public.app_job.created_time IS '创建时间';
 
 
 --
--- Name: COLUMN app_job.updated_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN app_job.updated_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.app_job.updated_at IS '更新时间';
+COMMENT ON COLUMN public.app_job.updated_time IS '更新时间';
 
 
 --
@@ -497,8 +497,8 @@ CREATE TABLE public.app_myapp (
     creator_id integer,
     id integer NOT NULL,
     description text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_time timestamp without time zone,
+    updated_time timestamp without time zone
 );
 
 
@@ -561,17 +561,17 @@ COMMENT ON COLUMN public.app_myapp.description IS '备注/描述';
 
 
 --
--- Name: COLUMN app_myapp.created_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN app_myapp.created_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.app_myapp.created_at IS '创建时间';
+COMMENT ON COLUMN public.app_myapp.created_time IS '创建时间';
 
 
 --
--- Name: COLUMN app_myapp.updated_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN app_myapp.updated_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.app_myapp.updated_at IS '更新时间';
+COMMENT ON COLUMN public.app_myapp.updated_time IS '更新时间';
 
 
 --
@@ -619,8 +619,8 @@ CREATE TABLE public.gen_demo (
     creator_id integer,
     id integer NOT NULL,
     description text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_time timestamp without time zone,
+    updated_time timestamp without time zone
 );
 
 
@@ -669,17 +669,17 @@ COMMENT ON COLUMN public.gen_demo.description IS '备注/描述';
 
 
 --
--- Name: COLUMN gen_demo.created_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN gen_demo.created_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.gen_demo.created_at IS '创建时间';
+COMMENT ON COLUMN public.gen_demo.created_time IS '创建时间';
 
 
 --
--- Name: COLUMN gen_demo.updated_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN gen_demo.updated_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.gen_demo.updated_at IS '更新时间';
+COMMENT ON COLUMN public.gen_demo.updated_time IS '更新时间';
 
 
 --
@@ -723,8 +723,8 @@ CREATE TABLE public.gen_table (
     creator_id integer,
     id integer NOT NULL,
     description text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_time timestamp without time zone,
+    updated_time timestamp without time zone
 );
 
 
@@ -836,17 +836,17 @@ COMMENT ON COLUMN public.gen_table.description IS '备注/描述';
 
 
 --
--- Name: COLUMN gen_table.created_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN gen_table.created_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.gen_table.created_at IS '创建时间';
+COMMENT ON COLUMN public.gen_table.created_time IS '创建时间';
 
 
 --
--- Name: COLUMN gen_table.updated_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN gen_table.updated_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.gen_table.updated_at IS '更新时间';
+COMMENT ON COLUMN public.gen_table.updated_time IS '更新时间';
 
 
 --
@@ -877,8 +877,8 @@ CREATE TABLE public.gen_table_column (
     creator_id integer,
     id integer NOT NULL,
     description text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_time timestamp without time zone,
+    updated_time timestamp without time zone
 );
 
 
@@ -1053,17 +1053,17 @@ COMMENT ON COLUMN public.gen_table_column.description IS '备注/描述';
 
 
 --
--- Name: COLUMN gen_table_column.created_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN gen_table_column.created_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.gen_table_column.created_at IS '创建时间';
+COMMENT ON COLUMN public.gen_table_column.created_time IS '创建时间';
 
 
 --
--- Name: COLUMN gen_table_column.updated_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN gen_table_column.updated_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.gen_table_column.updated_at IS '更新时间';
+COMMENT ON COLUMN public.gen_table_column.updated_time IS '更新时间';
 
 
 --
@@ -1122,8 +1122,8 @@ CREATE TABLE public.system_dept (
     status boolean NOT NULL,
     parent_id integer,
     description text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_time timestamp without time zone,
+    updated_time timestamp without time zone
 );
 
 
@@ -1186,17 +1186,17 @@ COMMENT ON COLUMN public.system_dept.description IS '备注/描述';
 
 
 --
--- Name: COLUMN system_dept.created_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN system_dept.created_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.system_dept.created_at IS '创建时间';
+COMMENT ON COLUMN public.system_dept.created_time IS '创建时间';
 
 
 --
--- Name: COLUMN system_dept.updated_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN system_dept.updated_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.system_dept.updated_at IS '更新时间';
+COMMENT ON COLUMN public.system_dept.updated_time IS '更新时间';
 
 
 --
@@ -1238,8 +1238,8 @@ CREATE TABLE public.system_dict_data (
     creator_id integer,
     id integer NOT NULL,
     description text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_time timestamp without time zone,
+    updated_time timestamp without time zone
 );
 
 
@@ -1337,17 +1337,17 @@ COMMENT ON COLUMN public.system_dict_data.description IS '备注/描述';
 
 
 --
--- Name: COLUMN system_dict_data.created_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN system_dict_data.created_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.system_dict_data.created_at IS '创建时间';
+COMMENT ON COLUMN public.system_dict_data.created_time IS '创建时间';
 
 
 --
--- Name: COLUMN system_dict_data.updated_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN system_dict_data.updated_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.system_dict_data.updated_at IS '更新时间';
+COMMENT ON COLUMN public.system_dict_data.updated_time IS '更新时间';
 
 
 --
@@ -1383,8 +1383,8 @@ CREATE TABLE public.system_dict_type (
     creator_id integer,
     id integer NOT NULL,
     description text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_time timestamp without time zone,
+    updated_time timestamp without time zone
 );
 
 
@@ -1440,17 +1440,17 @@ COMMENT ON COLUMN public.system_dict_type.description IS '备注/描述';
 
 
 --
--- Name: COLUMN system_dict_type.created_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN system_dict_type.created_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.system_dict_type.created_at IS '创建时间';
+COMMENT ON COLUMN public.system_dict_type.created_time IS '创建时间';
 
 
 --
--- Name: COLUMN system_dict_type.updated_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN system_dict_type.updated_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.system_dict_type.updated_at IS '更新时间';
+COMMENT ON COLUMN public.system_dict_type.updated_time IS '更新时间';
 
 
 --
@@ -1494,8 +1494,8 @@ CREATE TABLE public.system_log (
     creator_id integer,
     id integer NOT NULL,
     description text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_time timestamp without time zone,
+    updated_time timestamp without time zone
 );
 
 
@@ -1607,17 +1607,17 @@ COMMENT ON COLUMN public.system_log.description IS '备注/描述';
 
 
 --
--- Name: COLUMN system_log.created_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN system_log.created_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.system_log.created_at IS '创建时间';
+COMMENT ON COLUMN public.system_log.created_time IS '创建时间';
 
 
 --
--- Name: COLUMN system_log.updated_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN system_log.updated_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.system_log.updated_at IS '更新时间';
+COMMENT ON COLUMN public.system_log.updated_time IS '更新时间';
 
 
 --
@@ -1666,8 +1666,8 @@ CREATE TABLE public.system_menu (
     affix boolean NOT NULL,
     parent_id integer,
     description text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_time timestamp without time zone,
+    updated_time timestamp without time zone
 );
 
 
@@ -1814,17 +1814,17 @@ COMMENT ON COLUMN public.system_menu.description IS '备注/描述';
 
 
 --
--- Name: COLUMN system_menu.created_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN system_menu.created_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.system_menu.created_at IS '创建时间';
+COMMENT ON COLUMN public.system_menu.created_time IS '创建时间';
 
 
 --
--- Name: COLUMN system_menu.updated_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN system_menu.updated_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.system_menu.updated_at IS '更新时间';
+COMMENT ON COLUMN public.system_menu.updated_time IS '更新时间';
 
 
 --
@@ -1861,8 +1861,8 @@ CREATE TABLE public.system_notice (
     creator_id integer,
     id integer NOT NULL,
     description text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_time timestamp without time zone,
+    updated_time timestamp without time zone
 );
 
 
@@ -1925,17 +1925,17 @@ COMMENT ON COLUMN public.system_notice.description IS '备注/描述';
 
 
 --
--- Name: COLUMN system_notice.created_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN system_notice.created_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.system_notice.created_at IS '创建时间';
+COMMENT ON COLUMN public.system_notice.created_time IS '创建时间';
 
 
 --
--- Name: COLUMN system_notice.updated_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN system_notice.updated_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.system_notice.updated_at IS '更新时间';
+COMMENT ON COLUMN public.system_notice.updated_time IS '更新时间';
 
 
 --
@@ -1973,8 +1973,8 @@ CREATE TABLE public.system_param (
     creator_id integer,
     id integer NOT NULL,
     description text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_time timestamp without time zone,
+    updated_time timestamp without time zone
 );
 
 
@@ -2044,17 +2044,17 @@ COMMENT ON COLUMN public.system_param.description IS '备注/描述';
 
 
 --
--- Name: COLUMN system_param.created_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN system_param.created_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.system_param.created_at IS '创建时间';
+COMMENT ON COLUMN public.system_param.created_time IS '创建时间';
 
 
 --
--- Name: COLUMN system_param.updated_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN system_param.updated_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.system_param.updated_at IS '更新时间';
+COMMENT ON COLUMN public.system_param.updated_time IS '更新时间';
 
 
 --
@@ -2090,8 +2090,8 @@ CREATE TABLE public.system_position (
     creator_id integer,
     id integer NOT NULL,
     description text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_time timestamp without time zone,
+    updated_time timestamp without time zone
 );
 
 
@@ -2147,17 +2147,17 @@ COMMENT ON COLUMN public.system_position.description IS '备注/描述';
 
 
 --
--- Name: COLUMN system_position.created_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN system_position.created_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.system_position.created_at IS '创建时间';
+COMMENT ON COLUMN public.system_position.created_time IS '创建时间';
 
 
 --
--- Name: COLUMN system_position.updated_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN system_position.updated_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.system_position.updated_at IS '更新时间';
+COMMENT ON COLUMN public.system_position.updated_time IS '更新时间';
 
 
 --
@@ -2195,8 +2195,8 @@ CREATE TABLE public.system_role (
     creator_id integer,
     id integer NOT NULL,
     description text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_time timestamp without time zone,
+    updated_time timestamp without time zone
 );
 
 
@@ -2266,17 +2266,17 @@ COMMENT ON COLUMN public.system_role.description IS '备注/描述';
 
 
 --
--- Name: COLUMN system_role.created_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN system_role.created_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.system_role.created_at IS '创建时间';
+COMMENT ON COLUMN public.system_role.created_time IS '创建时间';
 
 
 --
--- Name: COLUMN system_role.updated_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN system_role.updated_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.system_role.updated_at IS '更新时间';
+COMMENT ON COLUMN public.system_role.updated_time IS '更新时间';
 
 
 --
@@ -2451,8 +2451,8 @@ CREATE TABLE public.system_users (
     last_login timestamp with time zone,
     dept_id integer,
     description text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_time timestamp without time zone,
+    updated_time timestamp without time zone,
     creator_id integer
 );
 
@@ -2558,17 +2558,17 @@ COMMENT ON COLUMN public.system_users.description IS '备注/描述';
 
 
 --
--- Name: COLUMN system_users.created_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN system_users.created_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.system_users.created_at IS '创建时间';
+COMMENT ON COLUMN public.system_users.created_time IS '创建时间';
 
 
 --
--- Name: COLUMN system_users.updated_at; Type: COMMENT; Schema: public; Owner: tao
+-- Name: COLUMN system_users.updated_time; Type: COMMENT; Schema: public; Owner: tao
 --
 
-COMMENT ON COLUMN public.system_users.updated_at IS '更新时间';
+COMMENT ON COLUMN public.system_users.updated_time IS '更新时间';
 
 
 --
@@ -2732,7 +2732,7 @@ COPY public.alembic_version (version_num) FROM stdin;
 -- Data for Name: app_ai_mcp; Type: TABLE DATA; Schema: public; Owner: tao
 --
 
-COPY public.app_ai_mcp (name, type, url, command, args, env, creator_id, id, description, created_at, updated_at) FROM stdin;
+COPY public.app_ai_mcp (name, type, url, command, args, env, creator_id, id, description, created_time, updated_time) FROM stdin;
 \.
 
 
@@ -2740,7 +2740,7 @@ COPY public.app_ai_mcp (name, type, url, command, args, env, creator_id, id, des
 -- Data for Name: app_job; Type: TABLE DATA; Schema: public; Owner: tao
 --
 
-COPY public.app_job (name, jobstore, executor, trigger, trigger_args, func, args, kwargs, "coalesce", max_instances, start_date, end_date, status, creator_id, id, description, created_at, updated_at) FROM stdin;
+COPY public.app_job (name, jobstore, executor, trigger, trigger_args, func, args, kwargs, "coalesce", max_instances, start_date, end_date, status, creator_id, id, description, created_time, updated_time) FROM stdin;
 \.
 
 
@@ -2756,7 +2756,7 @@ COPY public.app_job_log (id, job_name, job_group, job_executor, invoke_target, j
 -- Data for Name: app_myapp; Type: TABLE DATA; Schema: public; Owner: tao
 --
 
-COPY public.app_myapp (name, status, access_url, icon_url, creator_id, id, description, created_at, updated_at) FROM stdin;
+COPY public.app_myapp (name, status, access_url, icon_url, creator_id, id, description, created_time, updated_time) FROM stdin;
 \.
 
 
@@ -2772,7 +2772,7 @@ COPY public.apscheduler_jobs (id, next_run_time, job_state) FROM stdin;
 -- Data for Name: gen_demo; Type: TABLE DATA; Schema: public; Owner: tao
 --
 
-COPY public.gen_demo (name, status, creator_id, id, description, created_at, updated_at) FROM stdin;
+COPY public.gen_demo (name, status, creator_id, id, description, created_time, updated_time) FROM stdin;
 \.
 
 
@@ -2780,7 +2780,7 @@ COPY public.gen_demo (name, status, creator_id, id, description, created_at, upd
 -- Data for Name: gen_table; Type: TABLE DATA; Schema: public; Owner: tao
 --
 
-COPY public.gen_table (table_name, table_comment, sub_table_name, sub_table_fk_name, class_name, package_name, module_name, business_name, function_name, gen_type, options, creator_id, id, description, created_at, updated_at) FROM stdin;
+COPY public.gen_table (table_name, table_comment, sub_table_name, sub_table_fk_name, class_name, package_name, module_name, business_name, function_name, gen_type, options, creator_id, id, description, created_time, updated_time) FROM stdin;
 \.
 
 
@@ -2788,7 +2788,7 @@ COPY public.gen_table (table_name, table_comment, sub_table_name, sub_table_fk_n
 -- Data for Name: gen_table_column; Type: TABLE DATA; Schema: public; Owner: tao
 --
 
-COPY public.gen_table_column (column_name, column_comment, column_type, column_length, column_default, python_type, python_field, is_pk, is_increment, is_nullable, is_unique, is_insert, is_edit, is_list, is_query, query_type, html_type, dict_type, sort, table_id, creator_id, id, description, created_at, updated_at) FROM stdin;
+COPY public.gen_table_column (column_name, column_comment, column_type, column_length, column_default, python_type, python_field, is_pk, is_increment, is_nullable, is_unique, is_insert, is_edit, is_list, is_query, query_type, html_type, dict_type, sort, table_id, creator_id, id, description, created_time, updated_time) FROM stdin;
 \.
 
 
@@ -2796,7 +2796,7 @@ COPY public.gen_table_column (column_name, column_comment, column_type, column_l
 -- Data for Name: system_dept; Type: TABLE DATA; Schema: public; Owner: tao
 --
 
-COPY public.system_dept (id, name, "order", code, status, parent_id, description, created_at, updated_at) FROM stdin;
+COPY public.system_dept (id, name, "order", code, status, parent_id, description, created_time, updated_time) FROM stdin;
 1	集团总公司	1	GROUP	t	\N	集团总公司	2025-11-08 01:37:41.088711	2025-11-08 01:37:41.088715
 2	北京分公司	1	BJ	t	1	北京分公司	2025-11-08 01:37:41.091516	2025-11-08 01:37:41.091518
 3	软件部	1	TECH	t	2	软件部	2025-11-08 01:37:41.092386	2025-11-08 01:37:41.092387
@@ -2808,7 +2808,7 @@ COPY public.system_dept (id, name, "order", code, status, parent_id, description
 -- Data for Name: system_dict_data; Type: TABLE DATA; Schema: public; Owner: tao
 --
 
-COPY public.system_dict_data (dict_sort, dict_label, dict_value, dict_type, status, css_class, list_class, is_default, dict_type_id, creator_id, id, description, created_at, updated_at) FROM stdin;
+COPY public.system_dict_data (dict_sort, dict_label, dict_value, dict_type, status, css_class, list_class, is_default, dict_type_id, creator_id, id, description, created_time, updated_time) FROM stdin;
 1	男	0	sys_user_sex	t	blue	\N	t	\N	1	1	性别男	2025-11-08 01:37:41.151958	2025-11-08 01:37:41.15196
 2	女	1	sys_user_sex	t	pink	\N	f	\N	1	2	性别女	2025-11-08 01:37:41.15196	2025-11-08 01:37:41.151961
 3	未知	2	sys_user_sex	t	red	\N	f	\N	1	3	性别未知	2025-11-08 01:37:41.151961	2025-11-08 01:37:41.151962
@@ -2850,7 +2850,7 @@ COPY public.system_dict_data (dict_sort, dict_label, dict_value, dict_type, stat
 -- Data for Name: system_dict_type; Type: TABLE DATA; Schema: public; Owner: tao
 --
 
-COPY public.system_dict_type (dict_name, dict_type, status, creator_id, id, description, created_at, updated_at) FROM stdin;
+COPY public.system_dict_type (dict_name, dict_type, status, creator_id, id, description, created_time, updated_time) FROM stdin;
 用户性别	sys_user_sex	t	1	1	用户性别列表	2025-11-08 01:37:41.147277	2025-11-08 01:37:41.147279
 系统是否	sys_yes_no	t	1	2	系统是否列表	2025-11-08 01:37:41.147279	2025-11-08 01:37:41.14728
 系统状态	sys_common_status	t	1	3	系统状态	2025-11-08 01:37:41.14728	2025-11-08 01:37:41.147281
@@ -2868,7 +2868,7 @@ COPY public.system_dict_type (dict_name, dict_type, status, creator_id, id, desc
 -- Data for Name: system_log; Type: TABLE DATA; Schema: public; Owner: tao
 --
 
-COPY public.system_log (type, request_path, request_method, request_payload, request_ip, login_location, request_os, request_browser, response_code, response_json, process_time, creator_id, id, description, created_at, updated_at) FROM stdin;
+COPY public.system_log (type, request_path, request_method, request_payload, request_ip, login_location, request_os, request_browser, response_code, response_json, process_time, creator_id, id, description, created_time, updated_time) FROM stdin;
 \.
 
 
@@ -2876,7 +2876,7 @@ COPY public.system_log (type, request_path, request_method, request_payload, req
 -- Data for Name: system_menu; Type: TABLE DATA; Schema: public; Owner: tao
 --
 
-COPY public.system_menu (id, name, type, "order", status, permission, icon, route_name, route_path, component_path, redirect, hidden, keep_alive, always_show, title, params, affix, parent_id, description, created_at, updated_at) FROM stdin;
+COPY public.system_menu (id, name, type, "order", status, permission, icon, route_name, route_path, component_path, redirect, hidden, keep_alive, always_show, title, params, affix, parent_id, description, created_time, updated_time) FROM stdin;
 1	仪表盘	1	1	t		client	Dashboard	/dashboard	\N	/dashboard/workplace	f	t	t	仪表盘	null	f	\N	初始化数据	2025-11-08 01:37:41.103235	2025-11-08 01:37:41.103238
 2	系统管理	1	2	t	\N	system	System	/system	\N	/system/menu	f	t	f	系统管理	null	f	\N	初始化数据	2025-11-08 01:37:41.103239	2025-11-08 01:37:41.103239
 3	应用管理	1	3	t	\N	el-icon-ShoppingBag	Application	/application	\N	/application/myapp	f	f	f	应用管理	null	f	\N	初始化数据	2025-11-08 01:37:41.10324	2025-11-08 01:37:41.10324
@@ -2995,7 +2995,7 @@ COPY public.system_menu (id, name, type, "order", status, permission, icon, rout
 -- Data for Name: system_notice; Type: TABLE DATA; Schema: public; Owner: tao
 --
 
-COPY public.system_notice (notice_title, notice_type, notice_content, status, creator_id, id, description, created_at, updated_at) FROM stdin;
+COPY public.system_notice (notice_title, notice_type, notice_content, status, creator_id, id, description, created_time, updated_time) FROM stdin;
 \.
 
 
@@ -3003,7 +3003,7 @@ COPY public.system_notice (notice_title, notice_type, notice_content, status, cr
 -- Data for Name: system_param; Type: TABLE DATA; Schema: public; Owner: tao
 --
 
-COPY public.system_param (config_name, config_key, config_value, config_type, status, creator_id, id, description, created_at, updated_at) FROM stdin;
+COPY public.system_param (config_name, config_key, config_value, config_type, status, creator_id, id, description, created_time, updated_time) FROM stdin;
 网站名称	sys_web_title	FastApiAdmin	t	t	1	1	网站名称	2025-11-08 01:37:41.142128	2025-11-08 01:37:41.14213
 网站描述	sys_web_description	FastApiAdmin 是完全开源的权限管理系统	t	t	1	2	网站描述	2025-11-08 01:37:41.14213	2025-11-08 01:37:41.142131
 网页图标	sys_web_favicon	https://service.fastapiadmin.com/api/v1/static/image/favicon.png	t	t	1	3	网页图标	2025-11-08 01:37:41.142131	2025-11-08 01:37:41.142132
@@ -3027,7 +3027,7 @@ COPY public.system_param (config_name, config_key, config_value, config_type, st
 -- Data for Name: system_position; Type: TABLE DATA; Schema: public; Owner: tao
 --
 
-COPY public.system_position (name, "order", status, creator_id, id, description, created_at, updated_at) FROM stdin;
+COPY public.system_position (name, "order", status, creator_id, id, description, created_time, updated_time) FROM stdin;
 \.
 
 
@@ -3035,7 +3035,7 @@ COPY public.system_position (name, "order", status, creator_id, id, description,
 -- Data for Name: system_role; Type: TABLE DATA; Schema: public; Owner: tao
 --
 
-COPY public.system_role (name, code, "order", status, data_scope, creator_id, id, description, created_at, updated_at) FROM stdin;
+COPY public.system_role (name, code, "order", status, data_scope, creator_id, id, description, created_time, updated_time) FROM stdin;
 管理员角色	ADMIN	1	t	4	1	1	初始化角色	2025-11-08 01:37:41.134932	2025-11-08 01:37:41.134933
 \.
 
@@ -3078,7 +3078,7 @@ COPY public.system_user_roles (user_id, role_id) FROM stdin;
 -- Data for Name: system_users; Type: TABLE DATA; Schema: public; Owner: tao
 --
 
-COPY public.system_users (id, username, password, name, status, mobile, email, gender, avatar, is_superuser, last_login, dept_id, description, created_at, updated_at, creator_id) FROM stdin;
+COPY public.system_users (id, username, password, name, status, mobile, email, gender, avatar, is_superuser, last_login, dept_id, description, created_time, updated_time, creator_id) FROM stdin;
 1	admin	$2b$12$e2IJgS/cvHgJ0H3G7Xa08OXoXnk6N/NX3IZRtubBDElA0VLZhkNOa	超级管理员	t	\N	\N	0	https://service.fastapiadmin.com/api/v1/static/image/avatar.png	t	\N	1	初始化管理员	2025-11-08 01:37:41.130346	2025-11-08 01:37:41.130347	\N
 2	demo	$2b$12$e2IJgS/cvHgJ0H3G7Xa08OXoXnk6N/NX3IZRtubBDElA0VLZhkNOa	演示用户	t	\N	\N	1	https://service.fastapiadmin.com/api/v1/static/image/avatar.png	f	\N	1	初始化演示用户	2025-11-08 01:37:41.130348	2025-11-08 01:37:41.130348	1
 \.

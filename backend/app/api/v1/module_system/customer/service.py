@@ -182,8 +182,8 @@ class CustomerService:
             'name': '名称', 
             'status': '状态',
             'description': '备注',
-            'created_at': '创建时间',
-            'updated_at': '更新时间',
+            'created_time': '创建时间',
+            'updated_time': '更新时间',
             'creator': '创建者',
             'code': '编码',
         }
