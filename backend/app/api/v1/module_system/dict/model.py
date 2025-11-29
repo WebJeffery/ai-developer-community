@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import String, Integer, Boolean, ForeignKey, Index
+from sqlalchemy import String, Integer, Boolean, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.base_model import ModelMixin
@@ -10,7 +10,7 @@ class DictTypeModel(ModelMixin):
     """
     字典类型表
     """
-    __tablename__: str = "system_dict_type"
+    __tablename__: str = "sys_dict_type"
     __table_args__: dict[str, str] = ({'comment': '字典类型表'})
 
     dict_name: Mapped[str] = mapped_column(String(255), nullable=False, comment='字典名称')
@@ -24,7 +24,7 @@ class DictDataModel(ModelMixin):
     """
     字典数据表
     """
-    __tablename__: str = "system_dict_data"
+    __tablename__: str = "sys_dict_data"
     __table_args__: dict[str, str] = ({'comment': '字典数据表'})
     
     dict_sort: Mapped[int] = mapped_column(Integer, nullable=False, default=0, comment='字典排序')
@@ -38,7 +38,7 @@ class DictDataModel(ModelMixin):
     # 添加外键关系，同时保留dict_type字段用于业务查询
     dict_type_id: Mapped[int] = mapped_column(
         Integer, 
-        ForeignKey('system_dict_type.id', ondelete='CASCADE'), 
+        ForeignKey('sys_dict_type.id', ondelete='CASCADE'), 
         nullable=False, 
         comment='字典类型ID'
     )

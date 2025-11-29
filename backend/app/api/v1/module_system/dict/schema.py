@@ -80,7 +80,7 @@ class DictDataCreateSchema(BaseModel):
     dict_type_id: int = Field(..., description='字典类型ID')
     css_class: Optional[str] = Field(default=None, max_length=100, description='样式属性（其他样式扩展）')
     list_class: Optional[str] = Field(default=None, description='表格回显样式')
-    is_default: Optional[str] = Field(default=None, description='是否默认（Y是 N否）')
+    is_default: Optional[bool] = Field(default=None, description='是否默认（Y是 N否）')
     status: Optional[str] = Field(default=None, description='状态（1正常 0停用）')
     description: Optional[str] = Field(default=None, max_length=255, description="描述")
     

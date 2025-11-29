@@ -18,18 +18,18 @@ class RoleMenusModel(MappedBase):
     
     定义角色与菜单的多对多关系，用于权限控制
     """
-    __tablename__: str = "system_role_menus"
+    __tablename__: str = "sys_role_menus"
     __table_args__: dict[str, str] = ({'comment': '角色菜单关联表'})
 
     role_id: Mapped[int] = mapped_column(
         Integer,
-        ForeignKey("system_role.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("sys_role.id", ondelete="CASCADE", onupdate="CASCADE"),
         primary_key=True,
         comment="角色ID"
     )
     menu_id: Mapped[int] = mapped_column(
         Integer,
-        ForeignKey("system_menu.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("sys_menu.id", ondelete="CASCADE", onupdate="CASCADE"),
         primary_key=True,
         comment="菜单ID"
     )
@@ -42,18 +42,18 @@ class RoleDeptsModel(MappedBase):
     定义角色与部门的多对多关系，用于数据权限控制
     仅当角色的data_scope=5(自定义数据权限)时使用此表
     """
-    __tablename__: str = "system_role_depts"
+    __tablename__: str = "sys_role_depts"
     __table_args__: dict[str, str] = ({'comment': '角色部门关联表'})
 
     role_id: Mapped[int] = mapped_column(
         Integer,
-        ForeignKey("system_role.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("sys_role.id", ondelete="CASCADE", onupdate="CASCADE"),
         primary_key=True,
         comment="角色ID"
     )
     dept_id: Mapped[int] = mapped_column(
         Integer,
-        ForeignKey("system_dept.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("sys_dept.id", ondelete="CASCADE", onupdate="CASCADE"),
         primary_key=True,
         comment="部门ID"
     )
@@ -88,7 +88,7 @@ class RoleModel(ModelMixin, UserMixin, TenantMixin):
       * 注意: 客户用户即使有此权限也只能看本客户数据
     
     - 5: 自定义数据权限
-      * 实现: WHERE dept_id IN (SELECT dept_id FROM system_role_depts WHERE role_id IN current_user.role_ids)
+      * 实现: WHERE dept_id IN (SELECT dept_id FROM sys_role_depts WHERE role_id IN current_user.role_ids)
       * 场景: 跨部门权限,如人事可以看多个指定部门
       * 使用: 通过role_depts关联表指定可访问的部门列表
     
@@ -97,7 +97,7 @@ class RoleModel(ModelMixin, UserMixin, TenantMixin):
     - 取所有角色data_scope的最大值(4>3>2>5>1)
     - 5(自定义)需要合并所有角色关联的部门
     """
-    __tablename__: str = "system_role"
+    __tablename__: str = "sys_role"
     __table_args__: dict[str, str] = ({'comment': '角色表'})
     __loader_options__: list[str] = ["menus", "depts", "created_by", "updated_by", "tenant"]
 
@@ -113,18 +113,18 @@ class RoleModel(ModelMixin, UserMixin, TenantMixin):
     
     # 关联关系 (继承自UserMixin和TenantMixin)
     menus: Mapped[list["MenuModel"]] = relationship(
-        secondary="system_role_menus", 
+        secondary="sys_role_menus", 
         back_populates="roles", 
         lazy="selectin", 
         order_by="MenuModel.order"
     )
     depts: Mapped[list["DeptModel"]] = relationship(
-        secondary="system_role_depts", 
+        secondary="sys_role_depts", 
         back_populates="roles", 
         lazy="selectin"
     )
     users: Mapped[list["UserModel"]] = relationship(
-        secondary="system_user_roles", 
+        secondary="sys_user_roles", 
         back_populates="roles", 
         lazy="selectin"
     )

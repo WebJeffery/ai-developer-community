@@ -5,8 +5,6 @@ from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 
 from app.core.base_model import ModelMixin, UserMixin, TenantMixin
-
-
 if TYPE_CHECKING:
     from app.api.v1.module_system.user.model import UserModel
 
@@ -25,7 +23,7 @@ class CustomerModel(ModelMixin, UserMixin, TenantMixin):
     - 代理商系统: 租户=总公司, 客户=各地代理商
     - SaaS平台: 租户=企业, 客户=企业下的子公司/部门
     """
-    __tablename__: str = 'system_customer'
+    __tablename__: str = 'sys_customer'
     __table_args__: dict[str, str] = ({'comment': '客户表'})
     __loader_options__: list[str] = ["created_by", "updated_by", "tenant"]
     

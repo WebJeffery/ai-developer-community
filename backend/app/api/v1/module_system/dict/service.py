@@ -129,6 +129,7 @@ class DictTypeService:
                         dict_label=item.dict_label,
                         dict_value=item.dict_value,
                         dict_type=data.dict_type,
+                        dict_type_id=item.dict_type_id,
                         css_class=item.css_class,
                         list_class=item.list_class,
                         is_default=item.is_default,
@@ -291,7 +292,8 @@ class DictDataService:
         try:
             async with async_db_session() as session:
                 async with session.begin():
-                    auth = AuthSchema(db=session)
+                    # 在初始化过程中，不需要检查数据权限
+                    auth = AuthSchema(db=session, check_data_scope=False)
                     obj_list = await DictTypeCRUD(auth).get_obj_list_crud()
                     if not obj_list:
                         log.warning("未找到任何字典类型数据")

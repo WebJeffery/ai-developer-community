@@ -71,7 +71,7 @@ class GenTableModel(ModelMixin):
         return class_name.strip()
 
 
-class GenTableColumnModel(ModelMixin, UserMixin, TenantMixin):
+class GenTableColumnModel(ModelMixin):
     """
     代码生成表字段
     

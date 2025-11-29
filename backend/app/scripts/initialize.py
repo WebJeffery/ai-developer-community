@@ -31,19 +31,14 @@ class InitializeData:
         """
         # 按照依赖关系排序：先创建基础表，再创建关联表
         self.prepare_init_models = [
-            # 核心租户表 - 必须第一个初始化
             TenantModel,
+            MenuModel,
             ParamsModel,
             DictTypeModel,
             DictDataModel,
-            # 基础表（项目启动初始化数据表，部门和菜单必须先创建）
-            MenuModel,
             DeptModel,
-            # 用户表 - 必须在角色表之前，因为角色依赖用户(created_id)
             UserModel,
-            # 角色表
             RoleModel,
-            # 关联表和其他表
             UserRolesModel
         ]
     
@@ -90,19 +85,19 @@ class InitializeData:
             
             try:
                 # 特殊处理具有嵌套 children 数据的表
-                if table_name in ["system_dept", "system_menu"]:
+                if table_name in ["sys_dept", "sys_menu"]:
                     # 获取对应的模型类
-                    model_class = DeptModel if table_name == "system_dept" else MenuModel
+                    model_class = DeptModel if table_name == "sys_dept" else MenuModel
                     objs = self.__create_objects_with_children(data, model_class)
                 # 处理字典类型表，保存类型映射
-                elif table_name == "system_dict_type":
+                elif table_name == "sys_dict_type":
                     objs = []
                     for item in data:
                         obj = model(**item)
                         objs.append(obj)
                         dict_type_mapping[item['dict_type']] = obj
                 # 处理字典数据表，添加dict_type_id关联
-                elif table_name == "system_dict_data":
+                elif table_name == "sys_dict_data":
                     objs = []
                     for item in data:
                         dict_type = item.get('dict_type')

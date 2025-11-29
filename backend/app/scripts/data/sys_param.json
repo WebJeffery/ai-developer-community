@@ -4,7 +4,7 @@
     "config_key": "sys_web_title",
     "config_value": "FastApiAdmin",
     "config_type": true,
-    "status": true,
+    "status": "0",
     "description": "初始化数据"
   },
   {
@@ -12,7 +12,7 @@
     "config_key": "sys_web_description",
     "config_value": "FastApiAdmin 是完全开源的权限管理系统",
     "config_type": true,
-    "status": true,
+    "status": "0",
     "description": "初始化数据"
   },
   {
@@ -20,7 +20,7 @@
     "config_key": "sys_web_favicon",
     "config_value": "https://service.fastapiadmin.com/api/v1/static/image/favicon.png",
     "config_type": true,
-    "status": true,
+    "status": "0",
     "description": "初始化数据"
   },
   {
@@ -28,7 +28,7 @@
     "config_key": "sys_web_logo",
     "config_value": "https://service.fastapiadmin.com/api/v1/static/image/logo.png",
     "config_type": true,
-    "status": true,
+    "status": "0",
     "description": "初始化数据"
   },
   {
@@ -36,7 +36,7 @@
     "config_key": "sys_login_background",
     "config_value": "https://service.fastapiadmin.com/api/v1/static/image/background.svg",
     "config_type": true,
-    "status": true,
+    "status": "0",
     "description": "初始化数据"
   },
   {
@@ -44,7 +44,7 @@
     "config_key": "sys_web_copyright",
     "config_value": "Copyright © 2025-2026 service.fastapiadmin.com 版权所有",
     "config_type": true,
-    "status": true,
+    "status": "0",
     "description": "初始化数据"
   },
   {
@@ -52,7 +52,7 @@
     "config_key": "sys_keep_record",
     "config_value": "陕ICP备2025069493号-1",
     "config_type": true,
-    "status": true,
+    "status": "0",
     "description": "初始化数据"
   },
   {
@@ -60,7 +60,7 @@
     "config_key": "sys_help_doc",
     "config_value": "https://service.fastapiadmin.com",
     "config_type": true,
-    "status": true,
+    "status": "0",
     "description": "初始化数据"
   },
   {
@@ -68,7 +68,7 @@
     "config_key": "sys_web_privacy",
     "config_value": "https://github.com/1014TaoTao/FastapiAdmin/blob/master/LICENSE",
     "config_type": true,
-    "status": true,
+    "status": "0",
     "description": "初始化数据"
   },
   {
@@ -76,7 +76,7 @@
     "config_key": "sys_web_clause",
     "config_value": "https://github.com/1014TaoTao/FastapiAdmin/blob/master/LICENSE",
     "config_type": true,
-    "status": true,
+    "status": "0",
     "description": "初始化数据"
   },
   {
@@ -84,7 +84,7 @@
     "config_key": "sys_git_code",
     "config_value": "https://github.com/1014TaoTao/FastapiAdmin.git",
     "config_type": true,
-    "status": true,
+    "status": "0",
     "description": "初始化数据"
   },
   {
@@ -92,7 +92,7 @@
     "config_key": "sys_web_version",
     "config_value": "2.0.0",
     "config_type": true,
-    "status": true,
+    "status": "0",
     "description": "初始化数据"
   },
   {
@@ -100,7 +100,7 @@
     "config_key": "demo_enable",
     "config_value": "false",
     "config_type": true,
-    "status": true,
+    "status": "0",
     "description": "初始化数据"
   },
   {
@@ -108,7 +108,7 @@
     "config_key": "ip_white_list",
     "config_value": "[\"127.0.0.1\"]",
     "config_type": true,
-    "status": true,
+    "status": "0",
     "description": "初始化数据"
   },
   {
@@ -116,7 +116,7 @@
     "config_key": "white_api_list_path",
     "config_value": "[\"/api/v1/system/auth/login\", \"/api/v1/system/auth/token/refresh\", \"/api/v1/system/auth/captcha/get\", \"/api/v1/system/auth/logout\", \"/api/v1/system/config/info\", \"/api/v1/system/user/current/info\", \"/api/v1/system/notice/available\"]",
     "config_type": true,
-    "status": true,
+    "status": "0",
     "description": "初始化数据"
   },
   {
@@ -124,7 +124,7 @@
     "config_key": "ip_black_list",
     "config_value": "[]",
     "config_type": true,
-    "status": true,
+    "status": "0",
     "description": "初始化数据"
   }
 ]

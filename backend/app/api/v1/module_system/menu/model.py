@@ -37,7 +37,7 @@ class MenuModel(ModelMixin):
     
     支持树形结构(通过parent_id自关联)
     """
-    __tablename__: str = "system_menu"
+    __tablename__: str = "sys_menu"
     __table_args__: dict[str, str] = ({'comment': '菜单表'})
     __loader_options__: list[str] = ["roles"]
 
@@ -60,7 +60,7 @@ class MenuModel(ModelMixin):
     # 树形结构
     parent_id: Mapped[int | None] = mapped_column(
         Integer, 
-        ForeignKey('system_menu.id', ondelete='SET NULL'), 
+        ForeignKey('sys_menu.id', ondelete='SET NULL'), 
         default=None, 
         index=True, 
         comment='父菜单ID'
@@ -79,7 +79,7 @@ class MenuModel(ModelMixin):
         order_by="MenuModel.order"
     )
     roles: Mapped[list["RoleModel"]] = relationship(
-        secondary="system_role_menus", 
+        secondary="sys_role_menus", 
         back_populates="menus", 
         lazy="selectin"
     )

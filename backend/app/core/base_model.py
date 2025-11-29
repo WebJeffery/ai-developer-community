@@ -4,11 +4,13 @@ from datetime import datetime
 from sqlalchemy import DateTime, String, Integer, Text, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase, declared_attr, relationship
 from sqlalchemy.ext.asyncio import AsyncAttrs
-from typing import Optional
+from typing import TYPE_CHECKING
 
-from app.api.v1.module_system.customer.model import CustomerModel
-from app.api.v1.module_system.tenant.model import TenantModel
-from app.api.v1.module_system.user.model import UserModel
+if TYPE_CHECKING:
+    from app.api.v1.module_system.customer.model import CustomerModel
+    from app.api.v1.module_system.tenant.model import TenantModel
+    from app.api.v1.module_system.user.model import UserModel
+
 from app.utils.common_util import uuid4_str
 
 
@@ -88,19 +90,12 @@ class UserMixin(MappedBase):
     
     用于记录数据的创建者和更新者
     用于实现数据权限中的"仅本人数据权限"
-    
-    使用方式:
-    --------
-    class MyModel(ModelMixin, UserMixin, TenantMixin):
-        # 在子类中定义relationship即可,字段已由Mixin提供
-        created_by: Mapped["UserModel | None"] = relationship(...)
-        updated_by: Mapped["UserModel | None"] = relationship(...)
     """
     __abstract__: bool = True
     
     created_id: Mapped[int | None] = mapped_column(
         Integer,
-        ForeignKey("system_user.id", ondelete="SET NULL", onupdate="CASCADE"),
+        ForeignKey('sys_user.id', ondelete="SET NULL", onupdate="CASCADE"),
         default=None,
         nullable=True,
         index=True,
@@ -108,7 +103,7 @@ class UserMixin(MappedBase):
     )
     updated_id: Mapped[int | None] = mapped_column(
         Integer,
-        ForeignKey("system_user.id", ondelete="SET NULL", onupdate="CASCADE"),
+        ForeignKey('sys_user.id', ondelete="SET NULL", onupdate="CASCADE"),
         default=None,
         nullable=True,
         index=True,
@@ -130,7 +125,7 @@ class UserMixin(MappedBase):
         )
 
     @declared_attr
-    def updated_by(cls) -> Mapped[Optional["UserModel"]]:
+    def updated_by(cls) -> Mapped["UserModel | None"]:
         """
         更新人关联关系（延迟加载，避免循环依赖）
         """
@@ -150,31 +145,19 @@ class TenantMixin(MappedBase):
     
     用于实现多租户SaaS架构的核心数据隔离
     几乎所有业务表都需要此字段
-    
-    使用方式:
-    --------
-    # 租户级业务表 (必填tenant_id)
-    class ProductModel(ModelMixin, UserMixin, TenantMixin):
-        # 在子类中定义relationship即可,字段已由Mixin提供
-        tenant: Mapped["TenantModel"] = relationship(...)
-    
-    # 系统级配置表 (可选tenant_id, NULL表示系统级) - 需要覆盖字段
-    class MenuModel(ModelMixin, UserMixin, TenantMixin):
-        tenant_id: Mapped[int | None] = mapped_column(...)  # 覆盖为可选
-        tenant: Mapped["TenantModel | None"] = relationship(...)
     """
     __abstract__: bool = True
     
     tenant_id: Mapped[int | None] = mapped_column(
         Integer,
-        ForeignKey("system_tenant.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey('sys_tenant.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False,
         index=True,
         comment="所属租户ID"
     )
 
     @declared_attr
-    def tenant(cls) -> Mapped["TenantModel"]:
+    def tenant(cls) -> Mapped["TenantModel | None"]:
         """
         租户关联关系（延迟加载，避免循环依赖）
         """
@@ -197,23 +180,12 @@ class CustomerMixin(MappedBase):
     - 客户用户 (必填)
     - 客户业务数据 (根据业务需求)
     - 客户专属通知/日志 (可选)
-    
-    使用方式:
-    --------
-    # 客户级业务表
-    class OrderModel(ModelMixin, UserMixin, TenantMixin, CustomerMixin):
-        # 在子类中定义relationship即可,字段已由Mixin提供
-        customer: Mapped["CustomerModel | None"] = relationship(...)
-    
-    # 租户级业务表 (不需要CustomerMixin)
-    class DeptModel(ModelMixin, UserMixin, TenantMixin):
-        pass  # 不继承CustomerMixin
     """
     __abstract__: bool = True
     
     customer_id: Mapped[int | None] = mapped_column(
         Integer,
-        ForeignKey("system_customer.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey('sys_customer.id', ondelete="CASCADE", onupdate="CASCADE"),
         default=None,
         nullable=True,
         index=True,

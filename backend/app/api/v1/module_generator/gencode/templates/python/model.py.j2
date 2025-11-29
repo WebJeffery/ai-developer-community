@@ -9,16 +9,16 @@ from sqlalchemy.orm import relationship
 from typing import Optional
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.core.base_model import CreatorMixin
+from app.core.base_model import ModelMixin, UserMixin, TenantMixin, CustomerMixin
 
 
-class {{ class_name }}Model(CreatorMixin):
+class {{ class_name }}Model(ModelMixin, UserMixin, TenantMixin, CustomerMixin):
     """
     {{ function_name }}表
     """
     __tablename__ = '{{ table_name }}'
     __table_args__ = {'comment': '{{ function_name }}'}
-    __loader_options__ = ["creator"]
+    __loader_options__: list[str] = ["created_by", "updated_by", "tenant", "customer"]
 
     {% for column in columns %}
     {% if column.column_name not in ['id', 'created_id', 'description', 'created_time', 'updated_time'] %}

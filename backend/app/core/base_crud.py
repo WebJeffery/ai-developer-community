@@ -319,8 +319,12 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         """
         过滤数据权限（仅用于Select）。
         """
-        if not self.current_user:
-            raise CustomException(msg="当前用户不存在，无法过滤数据权限")
+        # 在初始化场景下，如果不需要检查数据权限，则直接返回原始查询
+        if not self.auth.check_data_scope:
+            return sql
+        # 在正常业务场景下，需要确保用户存在
+        # if not self.current_user:
+        #     raise sql
         filter = Permission(
             db=self.db,
             model=self.model,

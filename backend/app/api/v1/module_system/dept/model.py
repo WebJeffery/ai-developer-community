@@ -20,7 +20,7 @@ class DeptModel(ModelMixin, TenantMixin):
     - 部门不属于客户(customer_id不需要)
     - 支持无限层级嵌套的树形结构
     """
-    __tablename__: str = "system_dept"
+    __tablename__: str = "sys_dept"
     __table_args__: dict[str, str] = ({'comment': '部门表'})
     __loader_options__: list[str] = ["tenant"]
 
@@ -34,7 +34,7 @@ class DeptModel(ModelMixin, TenantMixin):
     # 树形结构字段
     parent_id: Mapped[int | None] = mapped_column(
         Integer, 
-        ForeignKey("system_dept.id", ondelete="SET NULL", onupdate="CASCADE"), 
+        ForeignKey("sys_dept.id", ondelete="SET NULL", onupdate="CASCADE"), 
         default=None, 
         index=True, 
         comment="父级部门ID"
@@ -52,7 +52,7 @@ class DeptModel(ModelMixin, TenantMixin):
         lazy="selectin"
     )
     roles: Mapped[list["RoleModel"]] = relationship(
-        secondary="system_role_depts", 
+        secondary="sys_role_depts", 
         back_populates="depts", 
         lazy="selectin"
     )

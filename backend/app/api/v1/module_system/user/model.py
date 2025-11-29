@@ -19,18 +19,18 @@ class UserRolesModel(MappedBase):
     
     定义用户与角色的多对多关系
     """
-    __tablename__: str = "system_user_roles"
+    __tablename__: str = "sys_user_roles"
     __table_args__: dict[str, str] = ({'comment': '用户角色关联表'})
 
     user_id: Mapped[int] = mapped_column(
         Integer,
-        ForeignKey("system_user.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("sys_user.id", ondelete="CASCADE", onupdate="CASCADE"),
         primary_key=True,
         comment="用户ID"
     )
     role_id: Mapped[int] = mapped_column(
         Integer,
-        ForeignKey("system_role.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("sys_role.id", ondelete="CASCADE", onupdate="CASCADE"),
         primary_key=True,
         comment="角色ID"
     )
@@ -42,18 +42,18 @@ class UserPositionsModel(MappedBase):
     
     定义用户与岗位的多对多关系
     """
-    __tablename__: str = "system_user_positions"
+    __tablename__: str = "sys_user_positions"
     __table_args__: dict[str, str] = ({'comment': '用户岗位关联表'})
 
     user_id: Mapped[int] = mapped_column(
         Integer,
-        ForeignKey("system_user.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("sys_user.id", ondelete="CASCADE", onupdate="CASCADE"),
         primary_key=True,
         comment="用户ID"
     )
     position_id: Mapped[int] = mapped_column(
         Integer,
-        ForeignKey("system_position.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("sys_position.id", ondelete="CASCADE", onupdate="CASCADE"),
         primary_key=True,
         comment="岗位ID"
     )
@@ -97,7 +97,7 @@ class UserModel(ModelMixin, UserMixin, TenantMixin, CustomerMixin):
     客户用户额外限制:
     - 无论data_scope如何,都必须加上: AND customer_id = current_user.customer_id
     """
-    __tablename__: str = "system_user"
+    __tablename__: str = "sys_user"
     __table_args__: dict[str, str] = ({'comment': '用户表'})
     __loader_options__: list[str] = ["dept", "roles", "positions", "created_by", "updated_by", "tenant", "customer"]
 
@@ -120,7 +120,7 @@ class UserModel(ModelMixin, UserMixin, TenantMixin, CustomerMixin):
     
     dept_id: Mapped[int | None] = mapped_column(
         Integer, 
-        ForeignKey('system_dept.id', ondelete="SET NULL", onupdate="CASCADE"), 
+        ForeignKey('sys_dept.id', ondelete="SET NULL", onupdate="CASCADE"), 
         nullable=True, 
         index=True, 
         comment="部门ID"
@@ -131,12 +131,12 @@ class UserModel(ModelMixin, UserMixin, TenantMixin, CustomerMixin):
         lazy="selectin"
     )
     roles: Mapped[list["RoleModel"]] = relationship(
-        secondary="system_user_roles", 
+        secondary="sys_user_roles", 
         back_populates="users", 
         lazy="selectin"
     )
     positions: Mapped[list["PositionModel"]] = relationship(
-        secondary="system_user_positions", 
+        secondary="sys_user_positions", 
         back_populates="users", 
         lazy="selectin"
     )

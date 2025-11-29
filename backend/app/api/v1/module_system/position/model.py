@@ -25,7 +25,7 @@ class PositionModel(ModelMixin, UserMixin, TenantMixin):
     - 权限控制: 可以根据岗位分配特定权限
     - 业务流程: 某些审批流可以指定特定岗位处理
     """
-    __tablename__: str = "system_position"
+    __tablename__: str = "sys_position"
     __table_args__: dict[str, str] = ({'comment': '岗位表'})
     __loader_options__: list[str] = ["users", "created_by", "updated_by", "tenant"]
     
@@ -34,7 +34,7 @@ class PositionModel(ModelMixin, UserMixin, TenantMixin):
     
     # 关联关系 (继承自UserMixin和TenantMixin)
     users: Mapped[list["UserModel"]] = relationship(
-        secondary="system_user_positions", 
+        secondary="sys_user_positions", 
         back_populates="positions", 
         lazy="selectin"
     )

@@ -8,7 +8,7 @@
     "css_class": "blue",
     "list_class": null,
     "is_default": true,
-    "status": true,
+    "status": "0",
     "description": "性别男"
   },
   {
@@ -20,7 +20,7 @@
     "css_class": "pink",
     "list_class": null,
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "性别女"
   },
   {
@@ -32,7 +32,7 @@
     "css_class": "red",
     "list_class": null,
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "性别未知"
   },
   {
@@ -44,7 +44,7 @@
     "css_class": "",
     "list_class": "primary",
     "is_default": true,
-    "status": true,
+    "status": "0",
     "description": "是"
   },
   {
@@ -56,7 +56,7 @@
     "css_class": "",
     "list_class": "danger",
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "否"
   },
   {
@@ -68,7 +68,7 @@
     "css_class": "",
     "list_class": "primary",
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "启用状态"
   },
   {
@@ -80,7 +80,7 @@
     "css_class": "",
     "list_class": "danger",
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "停用状态"
   },
   {
@@ -92,7 +92,7 @@
     "css_class": "blue",
     "list_class": "warning",
     "is_default": true,
-    "status": true,
+    "status": "0",
     "description": "通知"
   },
   {
@@ -104,7 +104,7 @@
     "css_class": "orange",
     "list_class": "success",
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "公告"
   },
   {
@@ -116,7 +116,7 @@
     "css_class": "",
     "list_class": "info",
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "其他操作"
   },
   {
@@ -128,7 +128,7 @@
     "css_class": "",
     "list_class": "info",
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "新增操作"
   },
   {
@@ -140,7 +140,7 @@
     "css_class": "",
     "list_class": "info",
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "修改操作"
   },
   {
@@ -152,7 +152,7 @@
     "css_class": "",
     "list_class": "danger",
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "删除操作"
   },
   {
@@ -164,7 +164,7 @@
     "css_class": "",
     "list_class": "primary",
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "授权操作"
   },
   {
@@ -176,7 +176,7 @@
     "css_class": "",
     "list_class": "warning",
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "导出操作"
   },
   {
@@ -188,7 +188,7 @@
     "css_class": "",
     "list_class": "warning",
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "导入操作"
   },
   {
@@ -200,7 +200,7 @@
     "css_class": "",
     "list_class": "danger",
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "强退操作"
   },
   {
@@ -212,7 +212,7 @@
     "css_class": "",
     "list_class": "warning",
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "生成操作"
   },
   {
@@ -224,7 +224,7 @@
     "css_class": "",
     "list_class": "danger",
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "清空操作"
   },
   {
@@ -236,7 +236,7 @@
     "css_class": "",
     "list_class": null,
     "is_default": true,
-    "status": true,
+    "status": "0",
     "description": "默认分组"
   },
   {
@@ -248,7 +248,7 @@
     "css_class": "",
     "list_class": null,
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "数据库分组"
   },
   {
@@ -260,7 +260,7 @@
     "css_class": "",
     "list_class": null,
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "reids分组"
   },
   {
@@ -272,7 +272,7 @@
     "css_class": "",
     "list_class": null,
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "线程池"
   },
   {
@@ -284,7 +284,7 @@
     "css_class": "",
     "list_class": null,
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "进程池"
   },
   {
@@ -296,7 +296,7 @@
     "css_class": "",
     "list_class": null,
     "is_default": true,
-    "status": true,
+    "status": "0",
     "description": "演示函数"
   },
   {
@@ -308,7 +308,7 @@
     "css_class": "",
     "list_class": null,
     "is_default": true,
-    "status": true,
+    "status": "0",
     "description": "指定日期任务触发器"
   },
   {
@@ -320,7 +320,7 @@
     "css_class": "",
     "list_class": null,
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "间隔触发器任务触发器"
   },
   {
@@ -332,7 +332,7 @@
     "css_class": "",
     "list_class": null,
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "间隔触发器任务触发器"
   },
   {
@@ -344,7 +344,7 @@
     "css_class": "",
     "list_class": null,
     "is_default": true,
-    "status": true,
+    "status": "0",
     "description": "默认表格回显样式"
   },
   {
@@ -356,7 +356,7 @@
     "css_class": "",
     "list_class": null,
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "主要表格回显样式"
   },
   {
@@ -368,7 +368,7 @@
     "css_class": "",
     "list_class": null,
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "成功表格回显样式"
   },
   {
@@ -380,7 +380,7 @@
     "css_class": "",
     "list_class": null,
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "信息表格回显样式"
   },
   {
@@ -392,7 +392,7 @@
     "css_class": "",
     "list_class": null,
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "警告表格回显样式"
   },
   {
@@ -404,7 +404,7 @@
     "css_class": "",
     "list_class": null,
     "is_default": false,
-    "status": true,
+    "status": "0",
     "description": "危险表格回显样式"
   }
 ]

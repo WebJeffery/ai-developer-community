@@ -278,7 +278,8 @@ class ParamsService:
         """
         async with async_db_session() as session:
             async with session.begin():
-                auth = AuthSchema(db=session)
+                # 在初始化过程中，不需要检查数据权限
+                auth = AuthSchema(db=session, check_data_scope=False)
                 config_obj = await ParamsCRUD(auth).get_obj_list_crud()
                 if not config_obj:
                     raise CustomException(msg="系统配置不存在")

@@ -29,7 +29,7 @@ class NoticeModel(ModelMixin, UserMixin, TenantMixin, CustomerMixin):
     - 创建人和创建时间
     - 通知的可见范围和发布状态
     """
-    __tablename__: str = "system_notice"
+    __tablename__: str = "sys_notice"
     __table_args__: dict[str, str] = ({'comment': '通知公告表'})
     __loader_options__: list[str] = ["created_by", "updated_by", "tenant", "customer"]
 

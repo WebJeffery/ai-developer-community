@@ -25,7 +25,7 @@ class OperationLogModel(ModelMixin, UserMixin, TenantMixin, CustomerMixin):
     - 1: 登录日志
     - 2: 操作日志
     """
-    __tablename__: str = "system_log"
+    __tablename__: str = "sys_log"
     __table_args__: dict[str, str] = ({'comment': '系统日志表'})
     __loader_options__: list[str] = ["created_by", "updated_by", "tenant", "customer"]
 

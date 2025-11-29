@@ -280,7 +280,8 @@ class SchedulerUtil:
         scheduler.start()
         async with async_db_session() as session:
             async with session.begin():
-                auth = AuthSchema(db=session)
+                # 在初始化过程中，不需要检查数据权限
+                auth = AuthSchema(db=session, check_data_scope=False)
                 job_list = await JobCRUD(auth).get_obj_list_crud()
                 for item in job_list:
                     

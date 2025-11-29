@@ -30,7 +30,7 @@ class ParamsModel(ModelMixin):
     - 租户级别参数
     - 配置项的名称、键、值和类型等信息
     """
-    __tablename__: str = "system_param"
+    __tablename__: str = "sys_param"
     __table_args__: dict[str, str] = ({'comment': '系统参数表'})
 
     config_name: Mapped[str] = mapped_column(String(500), nullable=False, comment='参数名称')

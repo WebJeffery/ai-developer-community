@@ -21,7 +21,7 @@ class TenantModel(ModelMixin):
     - 租户表不需要customer_id字段(租户不属于客户)
     - 但需要created_id/updated_id用于审计追踪
     """
-    __tablename__: str = 'system_tenant'
+    __tablename__: str = 'sys_tenant'
     __table_args__: dict[str, str] = {'comment': '租户表'}
 
     name: Mapped[str] = mapped_column(String(100), nullable=False, unique=True, comment='租户名称')

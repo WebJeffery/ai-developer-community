@@ -23,7 +23,7 @@ class Permission:
     DATA_SCOPE_ALL = 4  # 全部数据
     DATA_SCOPE_CUSTOM = 5  # 自定义数据
     
-    def __init__(self, db: AsyncSession, model: Any, current_user: UserModel, auth: AuthSchema):
+    def __init__(self, db: AsyncSession, model: Any, current_user: UserModel | None = None, auth: AuthSchema | None = None):
         """
         初始化权限过滤器实例
         
@@ -74,7 +74,7 @@ class Permission:
         """
         if (hasattr(self.model, "tenant_id") and 
             hasattr(self.current_user, "user_type") and 
-            self.current_user.user_type != "0"):  # 非系统用户
+            getattr(self.current_user, "user_type", None) != "0"):  # 非系统用户
             
             user_tenant_id = getattr(self.current_user, "tenant_id", None)
             if user_tenant_id is not None:
@@ -89,7 +89,7 @@ class Permission:
             user_customer_id = getattr(self.current_user, "customer_id", None)
             # 客户用户类型为2
             if (hasattr(self.current_user, "user_type") and 
-                self.current_user.user_type == "2" and 
+                getattr(self.current_user, "user_type", None) == "2" and 
                 user_customer_id is not None):
                 
                 self.conditions.append(getattr(self.model, "customer_id") == user_customer_id)
@@ -106,7 +106,7 @@ class Permission:
         5. 自定义数据权限 - 通过role_dept_relation表定义可访问的部门列表
         """
         # 只有在需要检查数据权限且模型有created_id字段时才应用数据范围过滤
-        if (self.auth.check_data_scope and 
+        if (self.auth and self.auth.check_data_scope and
             hasattr(self.model, "created_id") and 
             hasattr(self.current_user, "roles")):
             
@@ -121,7 +121,7 @@ class Permission:
             # 如果拥有全部数据权限，不需要额外过滤
             if self.DATA_SCOPE_ALL in data_scopes:
                 # 但仍需处理没有部门或角色的情况
-                if not getattr(self.current_user, "dept_id", None) or not self.current_user.roles:
+                if not getattr(self.current_user, "dept_id", None) or not getattr(self.current_user, "roles", None):
                     self._add_self_scope_condition()
                 return
             
@@ -169,7 +169,9 @@ class Permission:
         添加仅本人数据权限条件
         """
         if hasattr(self.model, "created_id"):
-            self.conditions.append(getattr(self.model, "created_id") == self.current_user.id)
+            user_id = getattr(self.current_user, "id", None)
+            if user_id is not None:
+                self.conditions.append(getattr(self.model, "created_id") == user_id)
     
     async def _add_custom_scope_condition(self, dept_ids: Set[int]) -> None:
         """
@@ -241,7 +243,7 @@ class Permission:
             
             # 应用租户隔离，确保用户只能看到自己租户的部门
             if (hasattr(self.current_user, "user_type") and 
-                self.current_user.user_type != "0"):  # 非系统用户
+                getattr(self.current_user, "user_type", None) != "0"):  # 非系统用户
                 user_tenant_id = getattr(self.current_user, "tenant_id", None)
                 if user_tenant_id is not None:
                     dept_sql = dept_sql.where(DeptModel.tenant_id == user_tenant_id)
