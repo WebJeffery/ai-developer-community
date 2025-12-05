@@ -644,38 +644,22 @@
             </el-table-column>
             <el-table-column label="新增" min-width="10%">
               <template #default="scope">
-                <el-checkbox
-                  v-model="scope.row.is_insert"
-                  true-value="1"
-                  false-value="0"
-                ></el-checkbox>
+                <el-checkbox v-model="scope.row.is_insert" />
               </template>
             </el-table-column>
             <el-table-column label="编辑" min-width="10%">
               <template #default="scope">
-                <el-checkbox
-                  v-model="scope.row.is_edit"
-                  true-value="1"
-                  false-value="0"
-                ></el-checkbox>
+                <el-checkbox v-model="scope.row.is_edit" />
               </template>
             </el-table-column>
             <el-table-column label="列表" min-width="10%">
               <template #default="scope">
-                <el-checkbox
-                  v-model="scope.row.is_list"
-                  true-value="1"
-                  false-value="0"
-                ></el-checkbox>
+                <el-checkbox v-model="scope.row.is_list" />
               </template>
             </el-table-column>
             <el-table-column label="查询" min-width="10%">
               <template #default="scope">
-                <el-checkbox
-                  v-model="scope.row.is_query"
-                  true-value="1"
-                  false-value="0"
-                ></el-checkbox>
+                <el-checkbox v-model="scope.row.is_query" />
               </template>
             </el-table-column>
             <el-table-column label="查询方式" min-width="12%">
@@ -704,30 +688,22 @@
             </el-table-column>
             <el-table-column label="自增" min-width="10%">
               <template #default="scope">
-                <el-checkbox v-model="scope.row.is_increment" true-value="1" false-value="0" />
+                <el-checkbox v-model="scope.row.is_increment" />
               </template>
             </el-table-column>
             <el-table-column label="允许空" min-width="10%">
               <template #default="scope">
-                <el-checkbox
-                  v-model="scope.row.is_nullable"
-                  true-value="0"
-                  false-value="1"
-                ></el-checkbox>
+                <el-checkbox v-model="scope.row.is_nullable" />
               </template>
             </el-table-column>
             <el-table-column label="唯一" min-width="10%">
               <template #default="scope">
-                <el-checkbox
-                  v-model="scope.row.is_unique"
-                  true-value="1"
-                  false-value="0"
-                ></el-checkbox>
+                <el-checkbox v-model="scope.row.is_unique" />
               </template>
             </el-table-column>
             <el-table-column label="主键" min-width="10%">
               <template #default="scope">
-                <el-checkbox v-model="scope.row.is_pk" true-value="1" false-value="0"></el-checkbox>
+                <el-checkbox v-model="scope.row.is_pk" />
               </template>
             </el-table-column>
             <el-table-column label="表单类型" min-width="12%">
