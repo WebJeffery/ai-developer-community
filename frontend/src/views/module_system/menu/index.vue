@@ -390,7 +390,6 @@
             v-if="formData.type !== MenuTypeEnum.CATALOG"
             label="父级菜单"
             prop="parent_id"
-            if
           >
             <el-tree-select
               v-model="formData.parent_id"
@@ -907,7 +906,8 @@ async function handleOpenDialog(
     }
   } else {
     dialogVisible.title = "新增菜单";
-    formData.id = undefined;
+    // 重置表单为初始状态
+    Object.assign(formData, initialFormData);
     // 设置父级部门
     if (parentId) {
       formData.parent_id = parentId;

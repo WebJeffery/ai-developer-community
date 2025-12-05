@@ -167,7 +167,7 @@ const transformRoutes = (routes: RouteVO[], isTopLevel: boolean = true): RouteRe
     // 4. 递归处理子路由，实现无限层级菜单
     if (normalizedRoute.children && normalizedRoute.children.length > 0) {
       // normalizedRoute.children = transformRoutes(route.children);
-    
+
       // 非叶子路由
       if (isTopLevel) {
         // 顶级路由（一级目录），使用Layout组件
