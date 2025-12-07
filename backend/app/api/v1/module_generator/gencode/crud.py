@@ -325,6 +325,24 @@ class GenTableCRUD(CRUDBase[GenTableModel, GenTableSchema, GenTableSchema]):
             log.error(f"创建表时发生错误: {e}")
             return False
 
+    async def execute_sql(self, sql: str) -> bool:
+        """
+        执行SQL语句。
+
+        参数:
+        - sql (str): 要执行的SQL语句。
+
+        返回:
+        - bool: 是否执行成功。
+        """
+        try:
+            # 执行SQL但不手动提交事务，由框架管理事务生命周期
+            await self.auth.db.execute(text(sql))
+            return True
+        except Exception as e:
+            log.error(f"执行SQL时发生错误: {e}")
+            return False
+
 
 class GenTableColumnCRUD(CRUDBase[GenTableColumnModel, GenTableColumnSchema, GenTableColumnSchema]):
     """代码生成业务表字段模块数据库操作层"""

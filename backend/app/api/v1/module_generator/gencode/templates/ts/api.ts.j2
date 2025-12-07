@@ -1,6 +1,6 @@
 import request from "@/utils/request";
 
-const API_PATH = "/{{ module_name }}/{{ business_name|lower }}";
+const API_PATH = "/{{ package_name }}/{{ business_name|lower }}";
 
 const {{ class_name }}API = {
   // 列表查询
@@ -95,7 +95,7 @@ export default {{ class_name }}API;
 // 列表查询参数
 export interface {{ class_name }}PageQuery extends PageQuery {
   {% for column in columns %}
-  {% if column.is_query and column.column != "BETWEEN" %}
+  {% if column.is_query and column.column != "BETWEEN" and column.column_name not in ['created_time', 'updated_time'] %}
   {{ column.column_name }}?: {{
     'string' if ('status' in (column.python_field|lower)) or (column.html_type == 'radio')
     else 'number' if column.is_pk == '1'
@@ -110,7 +110,6 @@ export interface {{ class_name }}PageQuery extends PageQuery {
 
 // 列表展示项
 export interface {{ class_name }}Table extends BaseType{
-  index?: number;
   {% for column in columns %}
   {% if column.column_name not in ['id', 'uuid', 'status', 'description', 'created_time', 'updated_time'] %}
   {{ column.column_name }}?: {{

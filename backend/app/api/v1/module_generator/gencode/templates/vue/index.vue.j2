@@ -16,7 +16,43 @@
         {% set column_comment = column.column_comment if column.column_comment else '' %}
         {% set parentheseIndex = column_comment.find("（") %}
         {% set comment = column_comment[:parentheseIndex] if parentheseIndex != -1 else column_comment %}
-        {% if column.html_type == "input" %}
+        {% if column.column_name == "status" %}
+        <el-form-item prop="status" label="状态">
+          <el-select
+            v-model="queryFormData.status"
+            placeholder="请选择状态"
+            style="width: 170px"
+            clearable
+          >
+            <el-option value="0" label="启用" />
+            <el-option value="1" label="停用" />
+          </el-select>
+        </el-form-item>
+        {% elif column.column_name == "created_id"%}
+        <el-form-item v-if="isExpand" prop="created_id" label="创建人">
+          <UserTableSelect
+            v-model="queryFormData.created_id"
+            @confirm-click="handleConfirm"
+            @clear-click="handleQuery"
+          />
+        </el-form-item>
+        {% elif column.column_name == "updated_id"%}
+        <el-form-item v-if="isExpand" prop="updated_id" label="更新人">
+          <UserTableSelect
+            v-model="queryFormData.updated_id"
+            @confirm-click="handleConfirm"
+            @clear-click="handleQuery"
+          />
+        </el-form-item>
+        {% elif column.column_name == "created_time"%}
+        <el-form-item v-if="isExpand" prop="created_time" label="创建时间">
+          <DatePicker v-model="createdDateRange" @update:model-value="handleCreatedDateRangeChange" />
+        </el-form-item>
+        {% elif column.column_name == "updated_time"%}
+        <el-form-item v-if="isExpand" prop="updated_time" label="更新时间">
+          <DatePicker v-model="updatedDateRange" @update:model-value="handleUpdatedDateRangeChange" />
+        </el-form-item>
+        {% elif column.html_type == "input" %}
         <el-form-item label="{{ comment }}" prop="{{ column.column_name }}">
           <el-input v-model="queryFormData.{{ column.column_name }}" placeholder="请输入{{ comment }}" clearable />
         </el-form-item>
@@ -39,38 +75,6 @@
         {% endif %}
         {% endif %}
         {% endfor %}
-        <el-form-item prop="status" label="状态">
-          <el-select
-            v-model="queryFormData.status"
-            placeholder="请选择状态"
-            style="width: 170px"
-            clearable
-          >
-            <el-option value="0" label="启用" />
-            <el-option value="1" label="停用" />
-          </el-select>
-        </el-form-item>
-        <el-form-item v-if="isExpand" prop="created_id" label="创建人">
-          <UserTableSelect
-            v-model="queryFormData.created_id"
-            @confirm-click="handleConfirm"
-            @clear-click="handleQuery"
-          />
-        </el-form-item>
-        <el-form-item v-if="isExpand" prop="updated_id" label="更新人">
-          <UserTableSelect
-            v-model="queryFormData.updated_id"
-            @confirm-click="handleConfirm"
-            @clear-click="handleQuery"
-          />
-        </el-form-item>
-        <!-- 时间范围，收起状态下隐藏 -->
-        <el-form-item v-if="isExpand" prop="created_time" label="创建时间">
-          <DatePicker v-model="createdDateRange" @update:model-value="handleCreatedDateRangeChange" />
-        </el-form-item>
-        <el-form-item v-if="isExpand" prop="updated_time" label="更新时间">
-          <DatePicker v-model="updatedDateRange" @update:model-value="handleUpdatedDateRangeChange" />
-        </el-form-item>
         <!-- 查询、重置、展开/收起按钮 -->
         <el-form-item>
           <el-button
@@ -151,10 +155,10 @@
                 </el-button>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item icon="Check" @click="handleMoreClick('0')">
+                    <el-dropdown-item :icon="Check" @click="handleMoreClick('0')">
                       批量启用
                     </el-dropdown-item>
-                    <el-dropdown-item icon="CircleClose" @click="handleMoreClick('1')">
+                    <el-dropdown-item :icon="CircleClose" @click="handleMoreClick('1')">
                       批量停用
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -344,23 +348,26 @@
       <template v-if="dialogVisible.type === 'detail'">
         <el-descriptions :column="4" border>
           {% for column in columns %}
-            {% set python_field = column.column_name %}
             {% set column_comment = column.column_comment if column.column_comment else '' %}
             {% set parentheseIndex = column_comment.find("（") %}
             {% set comment = column_comment[:parentheseIndex] if parentheseIndex != -1 else column_comment %}
-            {% if column.python_field == 'status' %}
+            {% if column.column_name == 'status' %}
             <el-descriptions-item label="状态" :span="2">
               <el-tag :type="detailFormData.status == '0' ? 'success' : 'danger'">
                 {{ '{{' }} detailFormData.status == '0' ? "启用" : "停用" {{ '}}' }}
               </el-tag>
             </el-descriptions-item>
-            {% elif column.python_field == 'created_id' %}
+            {% elif column.column_name == 'created_id' %}
             <el-descriptions-item label="创建人" :span="2">
               {{ '{{' }} detailFormData.created_by?.name {{ '}}' }}
             </el-descriptions-item>
-            {% elif column.python_field == 'updated_id' %}
+            {% elif column.column_name == 'updated_id' %}
             <el-descriptions-item label="更新人" :span="2">
               {{ '{{' }} detailFormData.updated_by?.name {{ '}}' }}
+            </el-descriptions-item>
+            {% else %}
+            <el-descriptions-item label="{{ comment }}" :span="2">
+              {{ '{{' }} detailFormData.{{ column.column_name }} {{ '}}' }}
             </el-descriptions-item>
             {% endif %}
           {% endfor %}
@@ -377,13 +384,24 @@
           {% set parentheseIndex = column_comment.find("（") %}
           {% set comment = column_comment[:parentheseIndex] if parentheseIndex != -1 else column_comment %}
           {% set required = 'true' if column.is_nullable == '1' else 'false' %}
-          {% if column.column_name not in ['uuid', 'created_time', 'updated_time', 'created_id', 'updated_id'] %}
+          {% if column.column_name not in ['id', 'uuid', 'created_time', 'updated_time', 'created_id', 'updated_id'] %}
           {% if column.column_name == "status" %}
           <el-form-item label="状态" prop="status" :required="true">
             <el-radio-group v-model="formData.status">
-              <el-radio :value="0">启用</el-radio>
-              <el-radio :value="1">停用</el-radio>
+              <el-radio value="0">启用</el-radio>
+              <el-radio value="1">停用</el-radio>
             </el-radio-group>
+          </el-form-item>
+          {% elif column.column_name == "description" %}
+          <el-form-item label="描述" prop="description">
+            <el-input
+              v-model="formData.description"
+              :rows="4"
+              :maxlength="100"
+              show-word-limit
+              type="textarea"
+              placeholder="请输入描述"
+            />
           </el-form-item>
           {% elif column.html_type == "input" %}
           <el-form-item label="{{ comment }}" prop="{{ column.column_name }}" :required="{{ required }}">

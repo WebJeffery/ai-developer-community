@@ -2,6 +2,7 @@
 
 import io
 import os
+from pathlib import Path
 import zipfile
 from typing import Any
 from sqlglot.expressions import Add, Alter, Create, Delete, Drop, Expression, Insert, Table, TruncateTable, Update
@@ -186,6 +187,43 @@ class GenTableService:
             raise CustomException(msg=f'创建表结构失败: {str(e)}')
     
     @classmethod
+    @handle_service_exception
+    async def execute_sql_service(cls, auth: AuthSchema, gen_table: GenTableOutSchema) -> bool:
+        """
+        执行菜单 SQL（INSERT / DO 块）并写入 sys_menu。
+        - 仅处理菜单 SQL，不再混杂建表逻辑；
+        - 文件不存在时给出友好提示；
+        - 统一异常信息，日志与业务提示分离。
+        """
+        sql_path = f'{BASE_DIR}/sql/menu/{gen_table.module_name}/{gen_table.business_name}.sql'
+
+        # 文件存在性前置检查，避免多余解析开销
+        if not os.path.isfile(sql_path):
+            raise CustomException(msg=f'菜单 SQL 文件不存在: {sql_path}')
+
+        sql = Path(sql_path).read_text(encoding='utf-8').strip()
+        if not sql:
+            raise CustomException(msg='菜单 SQL 文件内容为空')
+
+        # 仅做语法校验，不限制关键字；真正的语义安全由数据库权限控制
+        try:
+            statements = sqlglot_parse(sql, dialect=settings.DATABASE_TYPE)
+            if not statements:
+                raise CustomException(msg='菜单 SQL 语法解析失败，请检查文件内容')
+        except Exception as e:
+            log.error(f'菜单 SQL 解析异常: {e}')
+            raise CustomException(msg='菜单 SQL 语法错误，请检查文件内容')
+
+        # 执行 SQL
+        try:
+            await GenTableCRUD(auth).execute_sql(sql)
+            log.info(f'成功执行菜单 SQL: {sql_path}')
+            return True
+        except Exception as e:
+            log.error(f'菜单 SQL 执行失败: {e}')
+            raise CustomException(msg='菜单 SQL 执行失败，请确认语句及数据库状态')
+    
+    @classmethod
     def __is_valid_create_table(cls, sql_statements: list[Expression | None]) -> bool:
         """
         校验SQL语句是否为合法的建表语句。
@@ -349,6 +387,8 @@ class GenTableService:
                     f.write(render_content)
             except Exception as e:
                 raise CustomException(msg=f'渲染模板失败，表名：{gen_table_schema.table_name}，详细错误信息：{str(e)}')
+        
+        await cls.execute_sql_service(auth, gen_table_schema)
         return True
 
     @classmethod

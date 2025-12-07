@@ -516,9 +516,6 @@
                 <el-descriptions-item :label="info.function_name + '功能，后端实体层'">
                   backend/app/api/v1/{{ info.module_name }}/{{ info.business_name }}/model.py
                 </el-descriptions-item>
-                <el-descriptions-item :label="info.function_name + '功能，后端访问层'">
-                  backend/app/api/v1/{{ info.module_name }}/{{ info.business_name }}/param.py
-                </el-descriptions-item>
                 <el-descriptions-item :label="info.function_name + '功能，后端序列化层'">
                   backend/app/api/v1/{{ info.module_name }}/{{ info.business_name }}/schema.py
                 </el-descriptions-item>
