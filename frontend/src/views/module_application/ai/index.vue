@@ -707,8 +707,8 @@ onUnmounted(() => {
 
           .message-body {
             .fold-button {
-              margin-bottom: 8px;
               padding: 0;
+              margin-bottom: 8px;
               font-size: 12px;
               color: var(--el-text-color-secondary);
 
@@ -725,17 +725,17 @@ onUnmounted(() => {
               transition: all 0.3s ease;
 
               &.collapsed {
+                position: relative;
                 max-height: 120px;
                 overflow: hidden;
-                position: relative;
 
                 &::after {
-                  content: "";
                   position: absolute;
+                  right: 0;
                   bottom: 0;
                   left: 0;
-                  right: 0;
                   height: 40px;
+                  content: "";
                   background: linear-gradient(to bottom, transparent, var(--el-bg-color));
                 }
               }

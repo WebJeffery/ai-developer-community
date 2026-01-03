@@ -216,12 +216,17 @@
           </template>
         </el-table-column>
         <el-table-column label="菜单标题" prop="title" min-width="200" />
-        <el-table-column label="权限标识" prop="permission" min-width="220" />
+        <el-table-column label="权限标识" prop="permission" show-overflow-tooltip min-width="220" />
         <el-table-column label="路由名称" prop="route_name" min-width="200" />
         <el-table-column label="路由路径" prop="route_path" min-width="200" />
-        <el-table-column label="组件路径" prop="component_path" min-width="200" />
+        <el-table-column
+          label="组件路径"
+          prop="component_path"
+          show-overflow-tooltip
+          min-width="200"
+        />
         <el-table-column label="路由参数" prop="params" min-width="100" />
-        <el-table-column label="描述" prop="description" min-width="200" />
+        <el-table-column label="描述" prop="description" show-overflow-tooltip min-width="200" />
         <el-table-column label="创建时间" prop="created_time" min-width="200" sortable />
         <el-table-column label="更新时间" prop="updated_time" min-width="200" sortable />
         <el-table-column fixed="right" label="操作" align="center" min-width="260">
