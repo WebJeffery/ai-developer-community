@@ -13,7 +13,12 @@ from app.core.logger import log
 from app.core.router_class import OperationLogRoute
 from app.utils.common_util import bytes2file_response
 
-from .schema import RoleCreateSchema, RolePermissionSettingSchema, RoleQueryParam, RoleUpdateSchema
+from .schema import (
+    RoleCreateSchema,
+    RolePermissionSettingSchema,
+    RoleQueryParam,
+    RoleUpdateSchema,
+)
 from .service import RoleService
 
 RoleRouter = APIRouter(route_class=OperationLogRoute, prefix="/role", tags=["角色管理"])
@@ -39,8 +44,14 @@ async def get_obj_list_controller(
     order_by = [{"order": "asc"}]
     if page.order_by:
         order_by = page.order_by
-    result_dict_list = await RoleService.get_role_list_service(search=search, auth=auth, order_by=order_by)
-    result_dict = await PaginationService.paginate(data_list=result_dict_list, page_no=page.page_no, page_size=page.page_size)
+    result_dict_list = await RoleService.get_role_list_service(
+        search=search, auth=auth, order_by=order_by
+    )
+    result_dict = await PaginationService.paginate(
+        data_list=result_dict_list,
+        page_no=page.page_no,
+        page_size=page.page_size,
+    )
     log.info("查询角色成功")
     return SuccessResponse(data=result_dict, msg="查询角色成功")
 
@@ -127,7 +138,11 @@ async def delete_obj_controller(
     return SuccessResponse(msg="删除角色成功")
 
 
-@RoleRouter.patch("/available/setting", summary="批量修改角色状态", description="批量修改角色状态")
+@RoleRouter.patch(
+    "/available/setting",
+    summary="批量修改角色状态",
+    description="批量修改角色状态",
+)
 async def batch_set_available_obj_controller(
     data: BatchSetAvailable,
     auth: Annotated[AuthSchema, Depends(AuthPermission(["module_system:role:patch"]))],
@@ -167,7 +182,7 @@ async def set_role_permission_controller(
     return SuccessResponse(msg="授权角色成功")
 
 
-@RoleRouter.post('/export', summary="导出角色", description="导出角色")
+@RoleRouter.post("/export", summary="导出角色", description="导出角色")
 async def export_obj_list_controller(
     search: Annotated[RoleQueryParam, Depends()],
     auth: Annotated[AuthSchema, Depends(AuthPermission(["module_system:role:export"]))],
@@ -184,12 +199,10 @@ async def export_obj_list_controller(
     """
     role_query_result = await RoleService.get_role_list_service(search=search, auth=auth)
     role_export_result = await RoleService.export_role_list_service(role_list=role_query_result)
-    log.info('导出角色成功')
+    log.info("导出角色成功")
 
     return StreamResponse(
         data=bytes2file_response(role_export_result),
-        media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        headers={
-            'Content-Disposition': 'attachment; filename=role.xlsx'
-        }
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": "attachment; filename=role.xlsx"},
     )

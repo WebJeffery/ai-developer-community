@@ -13,7 +13,11 @@ from app.core.logger import log
 from app.core.router_class import OperationLogRoute
 from app.utils.common_util import bytes2file_response
 
-from .schema import PositionCreateSchema, PositionQueryParam, PositionUpdateSchema
+from .schema import (
+    PositionCreateSchema,
+    PositionQueryParam,
+    PositionUpdateSchema,
+)
 from .service import PositionService
 
 PositionRouter = APIRouter(route_class=OperationLogRoute, prefix="/position", tags=["岗位管理"])
@@ -39,8 +43,14 @@ async def get_obj_list_controller(
     order_by = [{"order": "asc"}]
     if page.order_by:
         order_by = page.order_by
-    result_dict_list = await PositionService.get_position_list_service(search=search, auth=auth, order_by=order_by)
-    result_dict = await PaginationService.paginate(data_list=result_dict_list, page_no=page.page_no, page_size=page.page_size)
+    result_dict_list = await PositionService.get_position_list_service(
+        search=search, auth=auth, order_by=order_by
+    )
+    result_dict = await PaginationService.paginate(
+        data_list=result_dict_list,
+        page_no=page.page_no,
+        page_size=page.page_size,
+    )
     log.info("查询岗位列表成功")
     return SuccessResponse(data=result_dict, msg="查询岗位列表成功")
 
@@ -127,7 +137,11 @@ async def delete_obj_controller(
     return SuccessResponse(msg="删除岗位成功")
 
 
-@PositionRouter.patch("/available/setting", summary="批量修改岗位状态", description="批量修改岗位状态")
+@PositionRouter.patch(
+    "/available/setting",
+    summary="批量修改岗位状态",
+    description="批量修改岗位状态",
+)
 async def batch_set_available_obj_controller(
     data: BatchSetAvailable,
     auth: Annotated[AuthSchema, Depends(AuthPermission(["module_system:position:patch"]))],
@@ -147,7 +161,7 @@ async def batch_set_available_obj_controller(
     return SuccessResponse(msg="批量修改岗位状态成功")
 
 
-@PositionRouter.post('/export', summary="导出岗位", description="导出岗位")
+@PositionRouter.post("/export", summary="导出岗位", description="导出岗位")
 async def export_obj_list_controller(
     search: Annotated[PositionQueryParam, Depends()],
     auth: Annotated[AuthSchema, Depends(AuthPermission(["module_system:position:export"]))],
@@ -162,14 +176,16 @@ async def export_obj_list_controller(
     返回:
     - StreamingResponse: 岗位Excel文件流
     """
-    position_query_result = await PositionService.get_position_list_service(search=search, auth=auth)
-    position_export_result = await PositionService.export_position_list_service(position_list=position_query_result)
-    log.info('导出岗位成功')
+    position_query_result = await PositionService.get_position_list_service(
+        search=search, auth=auth
+    )
+    position_export_result = await PositionService.export_position_list_service(
+        position_list=position_query_result
+    )
+    log.info("导出岗位成功")
 
     return StreamResponse(
         data=bytes2file_response(position_export_result),
-        media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        headers={
-            'Content-Disposition': 'attachment; filename=position.xlsx'
-        }
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": "attachment; filename=position.xlsx"},
     )

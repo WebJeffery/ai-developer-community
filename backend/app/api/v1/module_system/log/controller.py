@@ -22,7 +22,7 @@ LogRouter = APIRouter(route_class=OperationLogRoute, prefix="/log", tags=["日�
 async def get_obj_list_controller(
     page: Annotated[PaginationQueryParam, Depends()],
     search: Annotated[OperationLogQueryParam, Depends()],
-    auth: Annotated[AuthSchema, Depends(AuthPermission(["module_system:log:query"]))]
+    auth: Annotated[AuthSchema, Depends(AuthPermission(["module_system:log:query"]))],
 ) -> JSONResponse:
     """
     查询日志
@@ -38,8 +38,14 @@ async def get_obj_list_controller(
     order_by = [{"created_time": "desc"}]
     if page.order_by:
         order_by = page.order_by
-    result_dict_list = await OperationLogService.get_log_list_service(search=search, auth=auth, order_by=order_by)
-    result_dict = await PaginationService.paginate(data_list=result_dict_list, page_no=page.page_no, page_size=page.page_size)
+    result_dict_list = await OperationLogService.get_log_list_service(
+        search=search, auth=auth, order_by=order_by
+    )
+    result_dict = await PaginationService.paginate(
+        data_list=result_dict_list,
+        page_no=page.page_no,
+        page_size=page.page_size,
+    )
     log.info("查询日志成功")
     return SuccessResponse(data=result_dict, msg="查询日志成功")
 
@@ -47,7 +53,7 @@ async def get_obj_list_controller(
 @LogRouter.get("/detail/{id}", summary="日志详情", description="日志详情")
 async def get_obj_detail_controller(
     id: Annotated[int, Path(description="操作日志ID")],
-    auth: Annotated[AuthSchema, Depends(AuthPermission(["module_system:log:detail"]))]
+    auth: Annotated[AuthSchema, Depends(AuthPermission(["module_system:log:detail"]))],
 ) -> JSONResponse:
     """
     获取日志详情
@@ -67,7 +73,7 @@ async def get_obj_detail_controller(
 @LogRouter.delete("/delete", summary="删除日志", description="删除日志")
 async def delete_obj_log_controller(
     ids: Annotated[list[int], Body(description="ID列表")],
-    auth: Annotated[AuthSchema, Depends(AuthPermission(["module_system:log:delete"]))]
+    auth: Annotated[AuthSchema, Depends(AuthPermission(["module_system:log:delete"]))],
 ) -> JSONResponse:
     """
     删除日志
@@ -87,7 +93,7 @@ async def delete_obj_log_controller(
 @LogRouter.post("/export", summary="导出日志", description="导出日志")
 async def export_obj_list_controller(
     search: Annotated[OperationLogQueryParam, Depends()],
-    auth: Annotated[AuthSchema, Depends(AuthPermission(["module_system:log:export"]))]
+    auth: Annotated[AuthSchema, Depends(AuthPermission(["module_system:log:export"]))],
 ) -> StreamingResponse:
     """
     导出日志
@@ -100,13 +106,13 @@ async def export_obj_list_controller(
     - StreamingResponse: 包含导出日志的流式响应模型
     """
     operation_log_list = await OperationLogService.get_log_list_service(search=search, auth=auth)
-    operation_log_export_result = await OperationLogService.export_log_list_service(operation_log_list=operation_log_list)
-    log.info('导出日志成功')
+    operation_log_export_result = await OperationLogService.export_log_list_service(
+        operation_log_list=operation_log_list
+    )
+    log.info("导出日志成功")
 
     return StreamResponse(
         data=bytes2file_response(operation_log_export_result),
-        media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        headers={
-            'Content-Disposition': 'attachment; filename=log.xlsx'
-        }
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": "attachment; filename=log.xlsx"},
     )

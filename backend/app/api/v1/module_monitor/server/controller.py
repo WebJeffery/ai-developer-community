@@ -1,5 +1,3 @@
-
-
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 
@@ -14,10 +12,10 @@ ServerRouter = APIRouter(route_class=OperationLogRoute, prefix="/server", tags=[
 
 
 @ServerRouter.get(
-    '/info',
+    "/info",
     summary="查询服务器监控信息",
     description="查询服务器监控信息",
-    dependencies=[Depends(AuthPermission(["module_monitor:server:query"]))]
+    dependencies=[Depends(AuthPermission(["module_monitor:server:query"]))],
 )
 async def get_monitor_server_info_controller() -> JSONResponse:
     """
@@ -27,6 +25,6 @@ async def get_monitor_server_info_controller() -> JSONResponse:
     - JSONResponse: 包含服务器监控信息的JSON响应。
     """
     result_dict = await ServerService.get_server_monitor_info_service()
-    log.info(f'获取服务器监控信息成功: {result_dict}')
+    log.info(f"获取服务器监控信息成功: {result_dict}")
 
-    return SuccessResponse(data=result_dict, msg='获取服务器监控信息成功')
+    return SuccessResponse(data=result_dict, msg="获取服务器监控信息成功")
