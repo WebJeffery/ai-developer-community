@@ -1,6 +1,6 @@
 <div align="center">
      <p align="center">
-          <img src="https://gitee.com/fastapiadmin/FastDocs/raw/main/src/public/logo.png" width="150" height="150" alt="logo" /> 
+          <img src="https://gitee.com/fastapiadmin/FastDocs/raw/main/docs/public/logo.png" width="150" height="150" alt="logo" /> 
      </p>
      <h1>FastApiAdmin <img src="https://img.shields.io/badge/Version-v2.0.0-blue" alt="Version"></h1>
      <h3>Modern Full-Stack Rapid Development Platform</h3>
@@ -107,15 +107,15 @@ FastapiAdmin
 
 | Module | Screenshot |
 |------------|---------------------------------|
-| Dashboard  | ![Dashboard](https://gitee.com/fastapiadmin/FastDocs/raw/main/src/public/dashboard.png) |
-| Generator  | ![Generator](https://gitee.com/fastapiadmin/FastDocs/raw/main/src/public/gencode.png) |
-| AI       | ![AI](https://gitee.com/fastapiadmin/FastDocs/raw/main/src/public/ai.png) |
+| Dashboard  | ![Dashboard](https://gitee.com/fastapiadmin/FastDocs/raw/main/docs/public/dashboard.png) |
+| Generator  | ![Generator](https://gitee.com/fastapiadmin/FastDocs/raw/main/docs/public/gencode.png) |
+| AI       | ![AI](https://gitee.com/fastapiadmin/FastDocs/raw/main/docs/public/ai.png) |
 
 ### Mobile
 
 | Login <div style="width:60px"/> | Home <div style="width:60px"/> | Profile <div style="width:60px"/> |
 |----------|----------|----------|
-| ![Mobile Login](https://gitee.com/fastapiadmin/FastDocs/raw/main/src/public/app_login.png) | ![Mobile Home](https://gitee.com/fastapiadmin/FastDocs/raw/main/src/public/app_home.png) | ![Mobile Personal Info](https://gitee.com/fastapiadmin/FastDocs/raw/main/src/public/app_mine.png) |
+| ![Mobile Login](https://gitee.com/fastapiadmin/FastDocs/raw/main/docs/public/app_login.png) | ![Mobile Home](https://gitee.com/fastapiadmin/FastDocs/raw/main/docs/public/app_home.png) | ![Mobile Personal Info](https://gitee.com/fastapiadmin/FastDocs/raw/main/docs/public/app_mine.png) |
 
 ## 🚀 Quick Start
 
@@ -475,7 +475,7 @@ Thanks to the contributions and support of the following open-source projects:
 
 | Group QR Code | WeChat Pay QR Code |
 | --- | --- |
-| ![Group QR Code](https://gitee.com/fastapiadmin/FastDocs/raw/main/src/public/group.jpg) | ![WeChat Pay QR Code](https://gitee.com/fastapiadmin/FastDocs/raw/main/src/public/wechatPay.jpg) |
+| ![Group QR Code](https://gitee.com/fastapiadmin/FastDocs/raw/main/docs/public/group.jpg) | ![WeChat Pay QR Code](https://gitee.com/fastapiadmin/FastDocs/raw/main/docs/public/wechatPay.jpg) |
 
 ## ❤️ Support the Project
 

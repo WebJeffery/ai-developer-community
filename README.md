@@ -1,6 +1,6 @@
 <div align="center">
      <p align="center">
-          <img src="https://gitee.com/fastapiadmin/FastDocs/raw/main/src/public/logo.png" width="150" height="150" alt="logo" />  
+          <img src="https://gitee.com/fastapiadmin/FastDocs/raw/main/docs/public/logo.png" width="150" height="150" alt="logo" />  
      </p>
      <h1>FastApiAdmin <sup style="background-color: #28a745; color: white; padding: 2px 6px; border-radius: 3px; font-size: 0.4em; vertical-align: super; margin-left: 5px;">v2.0.0</h1>
      <h3>现代化全栈快速开发平台</h3>
@@ -109,15 +109,15 @@ FastapiAdmin
 
 | 模块名 <div style="width:60px"/> | 截图 |
 | ----- | --- |
-| 仪表盘   | ![仪表盘](https://gitee.com/fastapiadmin/FastDocs/raw/main/src/public/dashboard.png) |
-| 代码生成  | ![代码生成](https://gitee.com/fastapiadmin/FastDocs/raw/main/src/public/gencode.png) |
-| 智能助手  | ![智能助手](https://gitee.com/fastapiadmin/FastDocs/raw/main/src/public/ai.png) |
+| 仪表盘   | ![仪表盘](https://gitee.com/fastapiadmin/FastDocs/raw/main/docs/public/dashboard.png) |
+| 代码生成  | ![代码生成](https://gitee.com/fastapiadmin/FastDocs/raw/main/docs/public/gencode.png) |
+| 智能助手  | ![智能助手](https://gitee.com/fastapiadmin/FastDocs/raw/main/docs/public/ai.png) |
 
 ### 移动端
 
 | 登录 <div style="width:60px"/> | 首页 <div style="width:60px"/> | 个人中心 <div style="width:60px"/> |
 |----------|----------|----------|
-| ![移动端登录](https://gitee.com/fastapiadmin/FastDocs/raw/main/src/public/app_login.png) | ![移动端首页](https://gitee.com/fastapiadmin/FastDocs/raw/main/src/public/app_home.png) | ![移动端个人中心](https://gitee.com/fastapiadmin/FastDocs/raw/main/src/public/app_mine.png) |
+| ![移动端登录](https://gitee.com/fastapiadmin/FastDocs/raw/main/docs/public/app_login.png) | ![移动端首页](https://gitee.com/fastapiadmin/FastDocs/raw/main/docs/public/app_home.png) | ![移动端个人中心](https://gitee.com/fastapiadmin/FastDocs/raw/main/docs/public/app_mine.png) |
 | 个人  |
 
 ## 🚀 快速开始
@@ -459,7 +459,7 @@ A：使用 `./deploy.sh` 脚本一键部署到生产环境。
 
 | 群组二维码 | 微信支付二维码 |
 | --- | --- |
-| ![群组二维码](https://gitee.com/fastapiadmin/FastDocs/raw/main/src/public/group.jpg) | ![微信支付二维码](https://gitee.com/fastapiadmin/FastDocs/raw/main/src/public/wechatPay.jpg) |
+| ![群组二维码](https://gitee.com/fastapiadmin/FastDocs/raw/main/docs/public/group.jpg) | ![微信支付二维码](https://gitee.com/fastapiadmin/FastDocs/raw/main/docs/public/wechatPay.jpg) |
 
 ## ❤️ 支持项目
 
